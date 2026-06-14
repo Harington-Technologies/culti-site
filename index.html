@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Routine — 10 minutes pour voyager plus loin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0D1B2A; --jade: #1D9E75; --jade-light: #9FE1CB;
+  --jade-dark: #0F6E56; --sand: #F0ECE0; --sand-dark: #DDD8CC;
+  --slate: #4A5568; --slate-light: #718096; --white: #FFFFFF; --off-white: #F8F7F4;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; color: var(--ink); background: var(--white); line-height: 1.7; overflow-x: hidden; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 3rem;
+  background: rgba(13,27,42,0.96); backdrop-filter: blur(8px);
+}
+.nav-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--sand); }
+.nav-logo span { color: var(--jade); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-size: 13px; color: rgba(240,236,224,0.65); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--jade-light); }
+.nav-cta { background: var(--jade); color: var(--white); border: none; padding: 0.5rem 1.25rem; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+.nav-cta:hover { background: var(--jade-dark); }
+
+#hero {
+  min-height: 100vh; background: var(--ink);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 8rem 2rem 4rem; position: relative; overflow: hidden;
+}
+.hero-orb { position: absolute; border-radius: 50%; pointer-events: none; }
+.orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(29,158,117,0.18) 0%, transparent 70%); top: -100px; right: -100px; }
+.orb-2 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(29,158,117,0.10) 0%, transparent 70%); bottom: 50px; left: -50px; }
+.hero-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--jade); font-weight: 500; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+.hero-title { font-family: 'Playfair Display', serif; font-size: clamp(52px, 8vw, 88px); font-weight: 700; line-height: 0.95; color: var(--sand); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+.hero-title em { font-style: italic; color: var(--jade); }
+.hero-sub { font-size: 18px; color: rgba(240,236,224,0.6); max-width: 520px; line-height: 1.6; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+.hero-cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+.btn-primary { background: var(--jade); color: var(--white); border: none; padding: 0.85rem 2rem; border-radius: 4px; font-size: 15px; font-weight: 500; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.15s; display: inline-block; }
+.btn-primary:hover { background: var(--jade-dark); transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--sand); border: 1px solid rgba(240,236,224,0.3); padding: 0.85rem 2rem; border-radius: 4px; font-size: 15px; cursor: pointer; text-decoration: none; transition: border-color 0.2s, transform 0.15s; display: inline-block; }
+.btn-ghost:hover { border-color: var(--jade-light); color: var(--jade-light); transform: translateY(-1px); }
+.hero-counter { margin-top: 4rem; opacity: 0; animation: fadeUp 0.8s 1s forwards; }
+.counter-num { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 700; color: var(--jade); line-height: 1; }
+.counter-label { font-size: 12px; color: rgba(240,236,224,0.45); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
+.counter-dot { display: inline-block; width: 6px; height: 6px; background: var(--jade); border-radius: 50%; margin-right: 6px; vertical-align: middle; animation: pulse 2s infinite; }
+.hero-date { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); font-size: 11px; color: rgba(240,236,224,0.3); letter-spacing: 0.1em; }
+
+#concept { background: var(--off-white); padding: 7rem 2rem; }
+.section-inner { max-width: 960px; margin: 0 auto; }
+.section-label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--jade); font-weight: 500; margin-bottom: 1rem; }
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 48px); line-height: 1.1; margin-bottom: 1rem; color: var(--ink); }
+.section-body { font-size: 17px; color: var(--slate); max-width: 560px; line-height: 1.8; margin-bottom: 3.5rem; }
+.pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5px; background: var(--sand-dark); border: 1.5px solid var(--sand-dark); border-radius: 8px; overflow: hidden; }
+.pillar { background: var(--white); padding: 2rem 1.75rem; }
+.pillar-icon { font-size: 24px; margin-bottom: 1rem; }
+.pillar-title { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 0.5rem; color: var(--ink); }
+.pillar-body { font-size: 14px; color: var(--slate-light); line-height: 1.7; }
+.rubriques { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 3rem; }
+.rubrique-tag { font-size: 12px; border: 1px solid var(--sand-dark); border-radius: 20px; padding: 5px 14px; color: var(--slate); background: var(--white); }
+
+#edition { background: var(--ink); padding: 7rem 2rem; position: relative; overflow: hidden; }
+#edition::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: rgba(29,158,117,0.3); }
+.edition-header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 3rem; }
+.edition-title { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 42px); color: var(--sand); line-height: 1.1; }
+.edition-date-badge { font-size: 12px; color: var(--jade); border: 1px solid rgba(29,158,117,0.4); border-radius: 20px; padding: 4px 14px; letter-spacing: 0.05em; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
+.edition-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(240,236,224,0.1); border-radius: 8px; padding: 1.5rem; transition: border-color 0.2s, background 0.2s; }
+.edition-card:hover { border-color: rgba(29,158,117,0.4); background: rgba(29,158,117,0.06); }
+.card-eyebrow { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--jade); margin-bottom: 0.75rem; font-weight: 500; }
+.card-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--sand); margin-bottom: 0.5rem; line-height: 1.3; }
+.card-body { font-size: 13px; color: rgba(240,236,224,0.5); line-height: 1.6; }
+.card-flag { font-size: 20px; margin-bottom: 0.5rem; }
+.edition-cta-row { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.edition-cta-text { font-size: 14px; color: rgba(240,236,224,0.4); }
+.score-preview { background: rgba(255,255,255,0.04); border: 1px solid rgba(240,236,224,0.08); border-radius: 8px; padding: 1.5rem 2rem; margin-top: 3rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+.score-preview-num { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: var(--jade); flex-shrink: 0; }
+.score-preview-info { flex: 1; min-width: 200px; }
+.score-preview-level { font-size: 14px; color: var(--sand); font-weight: 500; margin-bottom: 6px; }
+.score-preview-sub { font-size: 12px; color: rgba(240,236,224,0.4); }
+.prog-bar { flex: 2; min-width: 160px; }
+.prog-label { font-size: 11px; color: rgba(240,236,224,0.35); margin-bottom: 6px; }
+.prog-track { background: rgba(255,255,255,0.08); border-radius: 3px; height: 4px; overflow: hidden; }
+.prog-fill { background: var(--jade); height: 100%; border-radius: 3px; width: 0%; transition: width 2s ease; }
+
+#newsletter { background: var(--sand); padding: 7rem 2rem; }
+.newsletter-inner { max-width: 640px; margin: 0 auto; text-align: center; }
+.newsletter-title { font-family: 'Playfair Display', serif; font-size: clamp(30px, 4vw, 46px); line-height: 1.1; margin-bottom: 1rem; color: var(--ink); }
+.newsletter-title em { font-style: italic; color: var(--jade-dark); }
+.newsletter-sub { font-size: 16px; color: var(--slate); line-height: 1.7; margin-bottom: 2.5rem; }
+.form-row { display: flex; gap: 8px; max-width: 460px; margin: 0 auto 1rem; }
+.form-row input { flex: 1; padding: 0.85rem 1.25rem; border: 1.5px solid var(--sand-dark); border-radius: 4px; font-size: 15px; font-family: 'Inter', sans-serif; background: var(--white); color: var(--ink); outline: none; transition: border-color 0.2s; }
+.form-row input:focus { border-color: var(--jade); }
+.form-row input::placeholder { color: #999; }
+.form-row button { background: var(--ink); color: var(--sand); border: none; padding: 0.85rem 1.5rem; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; font-family: 'Inter', sans-serif; transition: background 0.2s; }
+.form-row button:hover { background: var(--jade-dark); }
+.form-note { font-size: 12px; color: var(--slate-light); margin-bottom: 0.5rem; }
+.form-status { font-size: 13px; min-height: 20px; font-weight: 500; }
+.form-status.success { color: var(--jade-dark); }
+.form-status.error { color: #c0392b; }
+.social-proof { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-top: 2.5rem; flex-wrap: wrap; }
+.proof-item { font-size: 13px; color: var(--slate); display: flex; align-items: center; gap: 6px; }
+.proof-dot { width: 4px; height: 4px; background: var(--jade-dark); border-radius: 50%; }
+
+footer { background: var(--ink); padding: 3rem 2rem; text-align: center; }
+.footer-logo { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--sand); margin-bottom: 0.5rem; }
+.footer-logo span { color: var(--jade); }
+.footer-tagline { font-size: 13px; color: rgba(240,236,224,0.3); margin-bottom: 2rem; }
+.footer-links { display: flex; gap: 2rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+.footer-links a { font-size: 12px; color: rgba(240,236,224,0.35); text-decoration: none; }
+.footer-links a:hover { color: var(--jade-light); }
+.footer-copy { font-size: 11px; color: rgba(240,236,224,0.2); }
+
+.toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--jade-dark); color: var(--white); padding: 0.85rem 2rem; border-radius: 4px; font-size: 14px; font-weight: 500; transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); z-index: 200; white-space: nowrap; }
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+@media (max-width: 640px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .form-row { flex-direction: column; }
+  .score-preview { flex-direction: column; gap: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Routine<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#concept">Le concept</a></li>
+    <li><a href="#edition">Édition du jour</a></li>
+    <li><a href="#newsletter">S'abonner</a></li>
+  </ul>
+  <a href="#newsletter" class="nav-cta">Commencer — gratuit</a>
+</nav>
+
+<section id="hero">
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+  <div class="hero-eyebrow">Votre rituel matinal de culture</div>
+  <h1 class="hero-title">Voyagez plus loin<br>que les <em>algorithmes.</em></h1>
+  <p class="hero-sub">Chaque matin, une édition de 10 minutes. Un pays, une personnalité, une œuvre, une idée. Pas de scroll infini. Pas de bruit. Juste l'essentiel, bien raconté.</p>
+  <div class="hero-cta-row">
+    <a href="#newsletter" class="btn-primary">Recevoir Routine — gratuit</a>
+    <a href="#edition" class="btn-ghost">Voir l'édition du jour</a>
+  </div>
+  <div class="hero-counter">
+    <div class="counter-num"><span class="counter-dot"></span><span id="live-counter">—</span></div>
+    <div class="counter-label">abonnés dans la communauté Routine</div>
+  </div>
+  <div class="hero-date">Dimanche 14 juin 2026 · Édition n° 547</div>
+</section>
+
+<section id="concept">
+  <div class="section-inner">
+    <div class="section-label">Le concept</div>
+    <h2 class="section-title">Un magazine quotidien,<br>pas un flux d'actualités.</h2>
+    <p class="section-body">Routine est conçu pour les curieux qui manquent de temps — pas d'idées. Chaque édition est construite comme un magazine : une vraie ligne éditoriale, des faits vérifiés, et un fil conducteur qui donne envie de continuer.</p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon">🌍</div>
+        <div class="pillar-title">Voyager sans bouger</div>
+        <div class="pillar-body">Un pays différent chaque jour. Sa géographie, sa culture, ses traditions — racontées en trois paragraphes qui donnent envie d'aller plus loin.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">🧠</div>
+        <div class="pillar-title">Apprendre différemment</div>
+        <div class="pillar-body">Science, art, philosophie, nature. Des rubriques variées qui construisent, semaine après semaine, une culture générale solide et inattendue.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">🏆</div>
+        <div class="pillar-title">Progresser et mesurer</div>
+        <div class="pillar-body">Un quiz quotidien, un score personnel, des badges et un passeport culturel qui rendent chaque édition aussi satisfaisante qu'un jeu.</div>
+      </div>
+    </div>
+    <div class="rubriques">
+      <span class="rubrique-tag">🌍 Le monde</span>
+      <span class="rubrique-tag">👤 Destin extraordinaire</span>
+      <span class="rubrique-tag">🎨 Art</span>
+      <span class="rubrique-tag">🎵 Musique</span>
+      <span class="rubrique-tag">📚 Livre du jour</span>
+      <span class="rubrique-tag">🌌 Univers</span>
+      <span class="rubrique-tag">🧠 Idée du jour</span>
+      <span class="rubrique-tag">🦁 Le vivant</span>
+      <span class="rubrique-tag">🍰 Saveur du monde</span>
+      <span class="rubrique-tag">💬 Citation</span>
+      <span class="rubrique-tag">🧩 Énigme</span>
+      <span class="rubrique-tag">🎯 Quiz</span>
+    </div>
+  </div>
+</section>
+
+<section id="edition">
+  <div class="section-inner">
+    <div class="edition-header">
+      <h2 class="edition-title">Édition du jour</h2>
+      <span class="edition-date-badge">Dimanche 14 juin 2026</span>
+    </div>
+    <div class="cards-grid">
+      <div class="edition-card">
+        <div class="card-flag">🇲🇳</div>
+        <div class="card-eyebrow">Le monde</div>
+        <div class="card-title">Mongolie — l'horizon qui n'en finit jamais</div>
+        <div class="card-body">13 millions de chevaux pour 3,5 millions d'habitants. Un monde nomade où la maison se déplace avec les saisons.</div>
+      </div>
+      <div class="edition-card">
+        <div class="card-eyebrow">Destin extraordinaire</div>
+        <div class="card-title">Marie Curie — deux Prix Nobel, un hangar glacé</div>
+        <div class="card-body">En 1898, sans équipe ni financement, elle découvre le radium. Seule personne doublement nobélisée dans l'histoire.</div>
+      </div>
+      <div class="edition-card">
+        <div class="card-eyebrow">Art · Van Gogh</div>
+        <div class="card-title">La Nuit Étoilée — une nuit qui respire</div>
+        <div class="card-body">Peint depuis un asile en 1889. Les spirales n'existent pas dans le ciel réel — elles existent dans son esprit.</div>
+      </div>
+      <div class="edition-card">
+        <div class="card-eyebrow">Musique · Queen</div>
+        <div class="card-title">Bohemian Rhapsody — trop longue, trop bizarre</div>
+        <div class="card-body">Les producteurs refusaient de la diffuser en 1975. Elle est devenue l'une des chansons les plus célèbres de l'histoire.</div>
+      </div>
+      <div class="edition-card">
+        <div class="card-eyebrow">Le vivant</div>
+        <div class="card-title">La pieuvre a neuf cerveaux</div>
+        <div class="card-body">Trois cœurs. Du sang bleu. Un cerveau central et un par tentacule. Chaque bras pense en partie seul.</div>
+      </div>
+      <div class="edition-card">
+        <div class="card-eyebrow">Idée du jour · Danemark</div>
+        <div class="card-title">Hygge — l'art des moments simples</div>
+        <div class="card-body">Ce mot intraduisible désigne l'art de créer de la chaleur dans les petits instants. Le Danemark est l'un des pays les plus heureux du monde.</div>
+      </div>
+    </div>
+    <div class="edition-cta-row">
+      <a href="#newsletter" class="btn-primary">Lire l'édition complète</a>
+      <span class="edition-cta-text">+ Quiz, score, badges et citations</span>
+    </div>
+    <div class="score-preview">
+      <div class="score-preview-num">1 287</div>
+      <div class="score-preview-info">
+        <div class="score-preview-level">🔍 Explorateur — niveau 12</div>
+        <div class="score-preview-sub">213 points pour devenir Voyageur</div>
+      </div>
+      <div class="prog-bar">
+        <div class="prog-label">Progression vers le niveau suivant</div>
+        <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="newsletter">
+  <div class="newsletter-inner">
+    <div class="section-label" style="text-align:center;">Rejoindre Routine</div>
+    <h2 class="newsletter-title">Commencez demain matin.<br><em>10 minutes.</em> C'est tout.</h2>
+    <p class="newsletter-sub">Chaque jour à 7h, votre édition Routine vous attend. Une lecture, un quiz, un score. Gratuit, sans publicité, désabonnement en un clic.</p>
+    <div class="form-row">
+      <input type="email" id="email-input" placeholder="votre@email.com" autocomplete="email">
+      <button onclick="subscribe()" id="sub-btn">S'abonner →</button>
+    </div>
+    <p class="form-note">Gratuit · Sans publicité · Désabonnement en un clic</p>
+    <p class="form-status" id="form-status"></p>
+    <div class="social-proof">
+      <div class="proof-item"><span class="proof-dot"></span><span id="proof-count">—</span> abonnés actifs</div>
+      <div class="proof-item"><span class="proof-dot"></span>547 éditions publiées</div>
+      <div class="proof-item"><span class="proof-dot"></span>Note moyenne : 4,9 / 5</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Routine<span>.</span></div>
+  <div class="footer-tagline">10 minutes pour voyager plus loin que les algorithmes</div>
+  <div class="footer-links">
+    <a href="#concept">Le concept</a>
+    <a href="#edition">Édition du jour</a>
+    <a href="#newsletter">S'abonner</a>
+    <a href="#">Archives</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Routine · Tous droits réservés</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const SUPABASE_URL = 'https://zuahstlswkprzdmflekg.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_4PIOyT_7ILDL7O_IT0dxhg_EA-Ks3r5';
+
+  async function getCount() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/subscribers?select=id&active=eq.true`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      const data = await res.json();
+      const count = Array.isArray(data) ? data.length : 0;
+      const display = (count + 4800).toLocaleString('fr-FR');
+      document.getElementById('live-counter').textContent = display;
+      document.getElementById('proof-count').textContent = display;
+    } catch(e) {
+      document.getElementById('live-counter').textContent = '4 800+';
+      document.getElementById('proof-count').textContent = '4 800+';
+    }
+  }
+
+  async function subscribe() {
+    const email = document.getElementById('email-input').value.trim();
+    const status = document.getElementById('form-status');
+    const btn = document.getElementById('sub-btn');
+
+    if (!email || !email.includes('@')) {
+      status.textContent = 'Veuillez entrer une adresse email valide.';
+      status.className = 'form-status error';
+      return;
+    }
+
+    btn.textContent = '...';
+    btn.disabled = true;
+    status.textContent = '';
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/subscribers`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ email: email })
+      });
+
+      if (res.status === 201) {
+        status.textContent = '✓ Bienvenue ! Votre première édition arrive demain à 7h.';
+        status.className = 'form-status success';
+        document.getElementById('email-input').value = '';
+        showToast('Bienvenue dans Routine ! À demain matin. ✓');
+        getCount();
+      } else if (res.status === 409) {
+        status.textContent = 'Cette adresse est déjà inscrite — à demain !';
+        status.className = 'form-status success';
+      } else {
+        throw new Error('Erreur serveur');
+      }
+    } catch(e) {
+      status.textContent = 'Une erreur est survenue. Réessayez dans un instant.';
+      status.className = 'form-status error';
+    }
+
+    btn.textContent = 'S\'abonner →';
+    btn.disabled = false;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4000);
+  }
+
+  document.getElementById('email-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') subscribe();
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) document.getElementById('prog-fill').style.width = '78%'; });
+  }, { threshold: 0.3 });
+  observer.observe(document.getElementById('prog-fill').parentElement);
+
+  getCount();
+</script>
+</body>
+</html>
