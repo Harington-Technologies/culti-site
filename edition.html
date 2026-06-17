@@ -256,37 +256,57 @@ nav { background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bo
 const SB_URL = 'https://zuahstlswkprzdmflekg.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1YWhzdGxzd2twcnpkbWZsZWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDU2MjMsImV4cCI6MjA5NzAyMTYyM30.-F0WRbiprAa-Zt1ih1QdsQzuuqVW2froK6Ddfvrqoik';
 
+// Photos via Unsplash Source API — fiable par mot-clé
+function getImg(keyword, w=1400, h=500) {
+  const k = encodeURIComponent(keyword);
+  return `https://source.unsplash.com/featured/${w}x${h}/?${k}`;
+}
+
+// Photos fixes par pays — IDs Unsplash stables
 const COVERS = {
-  'Mongolie':'https://images.unsplash.com/photo-1513415431634-79a9a41bcb23?w=1400&q=85',
-  'Norvège':'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1400&q=85',
-  'Japon':'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=1400&q=85',
-  'Brésil':'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=1400&q=85',
-  'Inde':'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1400&q=85',
-  'Islande':'https://images.unsplash.com/photo-1476610182048-b716b8518aae?w=1400&q=85',
-  'Pérou':'https://images.unsplash.com/photo-1526392060635-9d6019884377?w=1400&q=85',
-  'Grèce':'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1400&q=85',
-  'Kenya':'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=1400&q=85',
-  'Maroc':'https://images.unsplash.com/photo-1548013146-72479768bada?w=1400&q=85',
-  'Chine':'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1400&q=85',
-  'Argentine':'https://images.unsplash.com/photo-1589909202802-8f4aadce1849?w=1400&q=85',
-  'Égypte':'https://images.unsplash.com/photo-1539650116574-75c0c6d73e6e?w=1400&q=85',
-  'Colombie':'https://images.unsplash.com/photo-1555636222-cae831e670b3?w=1400&q=85',
+  'Mongolie': 'https://images.unsplash.com/photo-1524220737062-1763cf92b72b?w=1400&q=85',
+  'Norvège':  'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1400&q=85',
+  'Japon':    'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1400&q=85',
+  'Brésil':   'https://images.unsplash.com/photo-1518639192441-8fce0a366e2e?w=1400&q=85',
+  'Inde':     'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=1400&q=85',
+  'Islande':  'https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=1400&q=85',
+  'Pérou':    'https://images.unsplash.com/photo-1580502304784-8985b7eb7260?w=1400&q=85',
+  'Grèce':    'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1400&q=85',
+  'Kenya':    'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1400&q=85',
+  'Maroc':    'https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=1400&q=85',
+  'Chine':    'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1400&q=85',
+  'Argentine':'https://images.unsplash.com/photo-1588392382834-a891154bca4d?w=1400&q=85',
+  'Égypte':   'https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=1400&q=85',
+  'Colombie': 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=1400&q=85',
+  'Portugal': 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=1400&q=85',
+  'Mexique':  'https://images.unsplash.com/photo-1518638150340-f706e86654de?w=1400&q=85',
+  'Thaïlande':'https://images.unsplash.com/photo-1528181304800-259b08848526?w=1400&q=85',
+  'Éthiopie': 'https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=1400&q=85',
+  'Vietnam':  'https://images.unsplash.com/photo-1528127269322-539801943592?w=1400&q=85',
+  'Turquie':  'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1400&q=85',
+  'Australie':'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=1400&q=85',
+  'Cuba':     'https://images.unsplash.com/photo-1500759285222-a95626b934cb?w=1400&q=85',
+  'Ghana':    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1400&q=85',
+  'Iran':     'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=85',
 };
+const DEFAULT = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1400&q=85';
+
+// Photos par rubrique — IDs stables
 const ART_IMGS = [
-  'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80',
-  'https://images.unsplash.com/photo-1547653801-6d2b34e1e4f8?w=800&q=80',
-  'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=800&q=80',
+  'https://images.unsplash.com/photo-1578926288207-a90a103f4fe1?w=800&q=80',
+  'https://images.unsplash.com/photo-1554188248-986adbb73be4?w=800&q=80',
+  'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80',
 ];
 const MUSIC_IMGS = [
-  'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&q=80',
-  'https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=800&q=80',
+  'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80',
+  'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&q=80',
+  'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800&q=80',
 ];
 const NATURE_IMGS = [
   'https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=800&q=80',
-  'https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=800&q=80',
-  'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=800&q=80',
+  'https://images.unsplash.com/photo-1456926631375-92c8ce872def?w=800&q=80',
+  'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=800&q=80',
 ];
-const DEFAULT = 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1400&q=85';
 
 function h(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function ri(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
@@ -334,6 +354,7 @@ async function loadEdition() {
     <div class="s-body">
       <div class="s-title">${h(c.pays?.nom)} — ${h(c.pays?.titre)}</div>
       <div class="s-text">${h(c.pays?.intro)}</div>
+      ${c.pays?.contexte ? `<div class="s-text" style="color:#718096;font-style:italic;">${h(c.pays.contexte)}</div>` : ''}
       <div class="stat-pill"><span class="stat-num">${h(c.pays?.chiffre)}</span><span class="stat-txt">${h(c.pays?.chiffre_label)}</span></div>
       <div class="lecon">${h(c.pays?.lecon)}</div>
     </div>`;
@@ -349,6 +370,7 @@ async function loadEdition() {
       <div class="s-sub">${h(c.personnalite?.epoque)} · ${h(c.personnalite?.titre)}</div>
       <img src="https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?w=800&q=80" class="s-img" alt="Portrait" loading="lazy">
       <div class="s-text">${h(c.personnalite?.histoire)}</div>
+      ${c.personnalite?.impact ? `<div class="s-text">${h(c.personnalite.impact)}</div>` : ''}
       <div class="lecon">${h(c.personnalite?.lecon)}</div>
     </div>`;
 
@@ -363,6 +385,7 @@ async function loadEdition() {
       <div class="s-sub">${h(c.art?.artiste)}, ${h(c.art?.annee)}</div>
       <img src="${ri(ART_IMGS)}" class="s-img" alt="Art" loading="lazy">
       <div class="s-text">${h(c.art?.description)}</div>
+      ${c.art?.contexte ? `<div class="s-text" style="color:#718096;font-style:italic;">${h(c.art.contexte)}</div>` : ''}
       <div class="defi">${h(c.art?.defi)}</div>
     </div>`;
 
@@ -378,6 +401,7 @@ async function loadEdition() {
       <div class="s-sub">${h(c.musique?.artiste)}, ${h(c.musique?.annee)}</div>
       <img src="${ri(MUSIC_IMGS)}" class="s-img" alt="Musique" loading="lazy">
       <div class="s-text">${h(c.musique?.anecdote)}</div>
+      ${c.musique?.pourquoi_ecouter ? `<div class="s-text">${h(c.musique.pourquoi_ecouter)}</div>` : ''}
       <div class="lecon">${h(c.musique?.lecon)}</div>
       <a class="yt-link" href="${ytUrl}" target="_blank"> Écouter sur YouTube</a>
     </div>`;
