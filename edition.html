@@ -257,50 +257,6 @@ const SB_URL = 'https://zuahstlswkprzdmflekg.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1YWhzdGxzd2twcnpkbWZsZWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDU2MjMsImV4cCI6MjA5NzAyMTYyM30.-F0WRbiprAa-Zt1ih1QdsQzuuqVW2froK6Ddfvrqoik';
 
 // Dégradés par pays — aucune dépendance externe
-const COVERS = {
-  'Mongolie':  'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  'Norvège':   'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-  'Japon':     'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-  'Brésil':    'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-  'Inde':      'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-  'Islande':   'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
-  'Pérou':     'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
-  'Grèce':     'linear-gradient(135deg, #4facfe 0%, #a8edea 100%)',
-  'Kenya':     'linear-gradient(135deg, #f9d423 0%, #ff4e50 100%)',
-  'Maroc':     'linear-gradient(135deg, #f7971e 0%, #ffd200 100%)',
-  'Chine':     'linear-gradient(135deg, #ff0844 0%, #ffb199 100%)',
-  'Argentine': 'linear-gradient(135deg, #74b9ff 0%, #a29bfe 100%)',
-  'Égypte':    'linear-gradient(135deg, #f6d365 0%, #c79081 100%)',
-  'Colombie':  'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-  'Portugal':  'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)',
-  'Mexique':   'linear-gradient(135deg, #6c5ce7 0%, #a8edea 100%)',
-  'Thaïlande': 'linear-gradient(135deg, #f9d423 0%, #e040fb 100%)',
-  'Vietnam':   'linear-gradient(135deg, #43e97b 0%, #fa709a 100%)',
-  'Turquie':   'linear-gradient(135deg, #f093fb 0%, #667eea 100%)',
-  'Australie': 'linear-gradient(135deg, #fd746c 0%, #ff9068 100%)',
-  'Cuba':      'linear-gradient(135deg, #f6d365 0%, #fd7036 100%)',
-};
-
-const SECTION_GRADIENTS = {
-  art:    'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)',
-  music:  'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
-  nature: 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)',
-  perso:  'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
-};
-
-function getCoverGradient(paysNom) {
-  const grad = COVERS[paysNom] || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-  return grad;
-}
-
-function makeCoverDiv(gradient, flag, nom) {
-  return `<div style="width:100%;height:100%;background:${gradient};display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;">
-    <div style="font-size:80px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.2));">${flag}</div>
-    <div style="font-size:22px;font-weight:900;color:white;letter-spacing:0.05em;text-shadow:0 2px 8px rgba(0,0,0,0.3);">${nom}</div>
-  </div>`;
-}
-
-function h(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function ri(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
 
 let sectionsRead = 0;
@@ -316,7 +272,7 @@ function markRead(el) {
 
 let quizData=[], cur=0, correct=0, answered=false;
 
-// Dégradés par pays
+// Dégradés par pays — une seule déclaration
 const COVERS = {
   'Mongolie':  'linear-gradient(135deg,#667eea,#764ba2)',
   'Norvège':   'linear-gradient(135deg,#4facfe,#00f2fe)',
@@ -340,21 +296,16 @@ const COVERS = {
   'Australie': 'linear-gradient(135deg,#fd746c,#ff9068)',
   'Cuba':      'linear-gradient(135deg,#f6d365,#fd7036)',
 };
-
 const SECTION_GRADIENTS = {
   art:    'linear-gradient(135deg,#a18cd1,#fbc2eb)',
   music:  'linear-gradient(135deg,#ffecd2,#fcb69f)',
   nature: 'linear-gradient(135deg,#d4fc79,#96e6a1)',
   perso:  'linear-gradient(135deg,#a1c4fd,#c2e9fb)',
 };
-
 function getCoverGradient(nom) {
   return COVERS[nom] || 'linear-gradient(135deg,#667eea,#764ba2)';
 }
-
-function getCoverImg(nom) {
-  return getCoverGradient(nom);
-}
+function getCoverImg(nom) { return getCoverGradient(nom); }
 
 async function loadEdition() {
   const params = new URLSearchParams(window.location.search);
