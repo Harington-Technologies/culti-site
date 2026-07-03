@@ -30,8 +30,8 @@ nav { background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); padding: 1
 .edition-card { background: var(--white); border: 1px solid var(--sand-dark); border-radius: 12px; padding: 1.5rem; cursor: pointer; transition: border-color 0.2s, transform 0.15s; text-decoration: none; display: block; color: inherit; }
 .edition-card:hover { border-color: var(--jade); transform: translateY(-2px); }
 .card-date { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate-light); margin-bottom: 0.75rem; }
-.card-flag { font-size: 28px; margin-bottom: 0.5rem; }
-.card-pays { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--ink); margin-bottom: 4px; }
+.card-flag { display: none; }
+.card-pays { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 20px; color: #1A1A2E; margin-bottom: 6px; letter-spacing: -0.01em; }
 .card-perso { font-size: 13px; color: var(--slate-light); margin-bottom: 0.75rem; }
 .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
 .card-tag { font-size: 11px; background: #FFF8F0; border: 1px solid var(--sand-dark); border-radius: 20px; padding: 3px 10px; color: var(--slate); }
@@ -124,8 +124,7 @@ function renderEditions(editions) {
     const idee = c.idee?.mot || '';
     return `<a class="edition-card" href="/edition.html?id=${e.id}">
       <div class="card-date">${e.date || ''}</div>
-      <div class="card-flag">${e.pays_flag || '🌍'}</div>
-      <div class="card-pays">${e.pays_nom || 'Édition'}</div>
+      <div class="card-pays">${e.pays_flag || ''} ${e.pays_nom || 'Édition'}</div>
       <div class="card-perso">${e.personnalite_nom || ''}</div>
       <div class="card-tags">
         ${art ? `<span class="card-tag">🎨 ${art}</span>` : ''}
