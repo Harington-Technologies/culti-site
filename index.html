@@ -295,6 +295,22 @@ footer { background: #FFF8F0; padding: 3rem 2rem; text-align: center; border-top
 
 <script>
 const SUPABASE_URL = 'https://zuahstlswkprzdmflekg.supabase.co';
+
+function flagToISO(flag) {
+  if (!flag) return 'un';
+  try {
+    const codePoints = [...flag].map(c => c.codePointAt(0));
+    return codePoints.map(cp => String.fromCharCode(cp - 127397)).join('').toLowerCase();
+  } catch(e) { return 'un'; }
+}
+
+function flagImg(flag, size = 32) {
+  const iso = flagToISO(flag);
+  return `<img src="https://flagcdn.com/${size}x${Math.round(size*0.75)}/${iso}.png" 
+    alt="${flag}" 
+    style="width:${size}px;height:${Math.round(size*0.75)}px;object-fit:cover;border-radius:3px;vertical-align:middle;margin-right:6px;"
+    onerror="this.style.display='none'">`;
+}
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1YWhzdGxzd2twcnpkbWZsZWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDU2MjMsImV4cCI6MjA5NzAyMTYyM30.-F0WRbiprAa-Zt1ih1QdsQzuuqVW2froK6Ddfvrqoik';
 
 // Photos Unsplash par rubrique — IDs stables et vérifiés
@@ -335,7 +351,7 @@ async function loadTodayEdition() {
     document.getElementById('edition-date-badge').textContent = ed.date;
 
     const cards = [
-      { eyebrow: '🌍 Le monde', emoji: '🌍', title: `${c.pays?.flag} ${c.pays?.nom} — ${c.pays?.titre}`, text: c.pays?.intro, img: UNSPLASH.monde, color: 0, link: `edition.html?id=${ed.id}` },
+      { eyebrow: '🌍 Le monde', emoji: '🌍', title: `${c.pays?.nom} — ${c.pays?.titre}`, flagHtml: flagImg(c.pays?.flag, 28), text: c.pays?.intro, img: UNSPLASH.monde, color: 0, link: `edition.html?id=${ed.id}` },
       { eyebrow: '👤 Destin extraordinaire', emoji: '👤', title: `${c.personnalite?.nom}`, text: c.personnalite?.histoire, img: UNSPLASH.perso, color: 1, link: `edition.html?id=${ed.id}` },
       { eyebrow: `🎨 Art · ${c.art?.artiste}`, emoji: '🎨', title: c.art?.oeuvre, text: c.art?.description, img: UNSPLASH.art, color: 2, link: `edition.html?id=${ed.id}` },
       { eyebrow: `🎵 Musique · ${c.musique?.artiste}`, emoji: '🎵', title: c.musique?.titre, text: c.musique?.anecdote, img: UNSPLASH.musique, color: 3, link: `edition.html?id=${ed.id}` },
@@ -349,14 +365,14 @@ async function loadTodayEdition() {
         <div class="card-img-placeholder ${COLORS[card.color]}" style="display:none;">${card.emoji}</div>
         <div class="card-body-inner">
           <div class="card-eyebrow">${card.eyebrow}</div>
-          <div class="card-title">${card.title}</div>
+          <div class="card-title">${card.flagHtml || ''}${card.title}</div>
           <div class="card-text">${card.text || ''}</div>
         </div>
       </a>`).join('');
 
     const meta = document.getElementById('edition-meta');
     meta.style.display = 'flex';
-    document.getElementById('edition-pays-flag').textContent = c.pays?.flag || '🌍';
+    document.getElementById('edition-pays-flag').innerHTML = flagImg(c.pays?.flag, 40);
     document.getElementById('edition-pays-nom').textContent = `${c.pays?.nom} · ${c.personnalite?.nom}`;
     document.getElementById('edition-perso-nom').textContent = c.idee?.mot ? `💡 Idée du jour : ${c.idee.mot}` : '';
     setTimeout(() => { document.getElementById('prog-fill').style.width = '78%'; }, 400);
