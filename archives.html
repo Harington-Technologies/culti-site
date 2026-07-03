@@ -92,7 +92,7 @@ let currentFilter = 'all';
 
 async function loadEditions() {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/editions?select=*&order=created_at.desc`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/editions?select=*&audience=eq.adulte&order=created_at.desc`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
     allEditions = await res.json();
