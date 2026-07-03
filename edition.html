@@ -32,12 +32,12 @@ nav { background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bo
 .cover-img { width: 100%; height: 100%; object-fit: cover; }
 .cover-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%); }
 .cover-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 2.5rem 3rem; }
-.cover-tags { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+.cover-tags { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; justify-content: center; }
 .cover-tag { background: var(--coral); color: white; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 14px; border-radius: 50px; }
 .cover-tag-teal { background: var(--teal); color: white; }
-.cover-flag { font-size: 52px; display: block; margin-bottom: 0.5rem; line-height: 1; }
-.cover-title { font-family: 'Playfair Display', serif; font-size: clamp(26px, 4vw, 44px); color: white; line-height: 1.15; margin-bottom: 0.5rem; font-weight: 700; }
-.cover-date { font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 600; }
+.cover-flag { font-size: 52px; display: block; margin-bottom: 0.5rem; line-height: 1; text-align: center; }
+.cover-title { font-family: 'Playfair Display', serif; font-size: clamp(26px, 4vw, 44px); color: white; line-height: 1.15; margin-bottom: 0.5rem; font-weight: 700; text-align: center; }
+.cover-date { font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 600; text-align: center; }
 
 /* PROGRESS BAR */
 .progress-bar { background: white; border-bottom: 1px solid #EEE; padding: 0.75rem 3rem; display: flex; align-items: center; gap: 1rem; }
@@ -203,7 +203,7 @@ nav { background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bo
         <span class="cover-tag">Édition du jour</span>
         <span class="cover-tag cover-tag-teal" id="cover-num"></span>
       </div>
-      <div id="cover-flag" style="margin-bottom:0.5rem;"></div>
+      
       <h1 class="cover-title" id="cover-title"></h1>
       <div class="cover-date" id="cover-date"></div>
     </div>
@@ -355,10 +355,7 @@ function getCoverGradient(nom) {
 function getCoverImg(nom) { return getCoverGradient(nom); }
 function h(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function makeCoverDiv(gradient, flag, nom) {
-  const iso = flagToISO(flag);
-  return '<div style="width:100%;height:100%;background:' + gradient + ';display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">' +
-    '<img src="https://flagcdn.com/80x60/' + iso + '.png" alt="' + nom + '" style="width:80px;height:60px;object-fit:cover;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.4);" onerror="this.style.display='none'">' +
-    '<div style="font-size:24px;font-weight:900;color:white;text-shadow:0 2px 8px rgba(0,0,0,0.5);">' + nom + '</div>' +
+  return '<div style="width:100%;height:100%;background:' + gradient + ';">' +
     '</div>';
 }
 
@@ -464,11 +461,10 @@ async function loadEditionForAudience(audience, date) {
   gradDiv.innerHTML = makeCoverDiv(coverGrad, c.pays?.flag||'🌍', c.pays?.nom||'');
   coverParent.insertBefore(gradDiv, coverParent.firstChild);
   coverEl.style.display = 'none';
-  document.getElementById('cover-flag').innerHTML = flagImg(c.pays?.flag, 56) + 
-    `<span style="display:none">${c.pays?.flag || ''}</span>`;
+  
   document.getElementById('cover-title').textContent = `${c.pays?.nom} — ${c.pays?.titre}`;
   document.getElementById('cover-date').textContent = ed.date;
-  document.getElementById('cover-num').textContent = '✦ ' + (c.pays?.nom || '');
+  document.getElementById('cover-num').textContent = ed.date || '';
 
   // Charger les photos Unsplash en parallèle
   const [photoPays, photoArt, photoVivant] = await Promise.all([
