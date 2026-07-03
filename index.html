@@ -193,7 +193,7 @@ footer { background: #FFF8F0; padding: 3rem 2rem; text-align: center; border-top
     <span class="rubrique-pill">🏆 Score</span>
   </div>
 
-  <div class="hero-date">Dimanche 14 juin 2026 · Édition n° 547</div>
+  <div class="hero-date" id="hero-date"></div>
 </section>
 
 <section id="concept">
@@ -271,8 +271,8 @@ footer { background: #FFF8F0; padding: 3rem 2rem; text-align: center; border-top
     <p class="form-status" id="form-status"></p>
 
     <div class="social-proof">
-      <div class="proof-item"><span class="proof-dot"></span><span id="proof-count">—</span> abonnés actifs</div>
-      <div class="proof-item"><span class="proof-dot"></span><span id="proof-editions">—</span> éditions publiées</div>
+      <div class="proof-item"><span class="proof-dot"></span><span id="proof-count">—</span>&nbsp;abonnés actifs</div>
+      <div class="proof-item"><span class="proof-dot"></span><span id="proof-editions">—</span>&nbsp;éditions publiées</div>
     </div>
   </div>
 </section>
@@ -348,6 +348,9 @@ async function loadTodayEdition() {
     if (!data || !data.length) return;
     const ed = data[0]; const c = ed.contenu;
     document.getElementById('edition-date-badge').textContent = ed.date;
+    // Mettre à jour la date dans le hero
+    const heroDate = document.getElementById('hero-date');
+    if (heroDate) heroDate.textContent = ed.date;
 
     const cards = [
       { eyebrow: '🌍 Le monde', emoji: '🌍', title: `${c.pays?.nom} — ${c.pays?.titre}`, flagHtml: flagImg(c.pays?.flag, 28), text: c.pays?.intro, img: UNSPLASH.monde, color: 0, link: `edition.html?id=${ed.id}` },
