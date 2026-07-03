@@ -203,7 +203,7 @@ nav { background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bo
         <span class="cover-tag">Édition du jour</span>
         <span class="cover-tag cover-tag-teal" id="cover-num"></span>
       </div>
-      <span class="cover-flag" id="cover-flag">🌍</span>
+      <div id="cover-flag" style="margin-bottom:0.5rem;"></div>
       <h1 class="cover-title" id="cover-title"></h1>
       <div class="cover-date" id="cover-date"></div>
     </div>
@@ -270,6 +270,22 @@ nav { background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bo
 
 <script>
 const SB_URL = 'https://zuahstlswkprzdmflekg.supabase.co';
+
+function flagToISO(flag) {
+  if (!flag) return 'un';
+  try {
+    const codePoints = [...flag].map(c => c.codePointAt(0));
+    return codePoints.map(cp => String.fromCharCode(cp - 127397)).join('').toLowerCase();
+  } catch(e) { return 'un'; }
+}
+
+function flagImg(flag, size = 48) {
+  const iso = flagToISO(flag);
+  return `<img src="https://flagcdn.com/${size}x${Math.round(size*0.75)}/${iso}.png" 
+    alt="${flag}" 
+    style="width:${size}px;height:${Math.round(size*0.75)}px;object-fit:cover;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.3);"
+    onerror="this.style.display='none'">`;
+}
 const UNSPLASH_KEY = 'FIpZxO53Giw_tuvyYxGbgUpNKuF8Fx0--2OK4-eS0Tc';
 
 async function getPhoto(query, fallback = 'travel nature') {
@@ -444,18 +460,19 @@ async function loadEditionForAudience(audience, date) {
   gradDiv.innerHTML = makeCoverDiv(coverGrad, c.pays?.flag||'🌍', c.pays?.nom||'');
   coverParent.insertBefore(gradDiv, coverParent.firstChild);
   coverEl.style.display = 'none';
-  document.getElementById('cover-flag').textContent = c.pays?.flag || '🌍';
+  document.getElementById('cover-flag').innerHTML = flagImg(c.pays?.flag, 56) + 
+    `<span style="display:none">${c.pays?.flag || ''}</span>`;
   document.getElementById('cover-title').textContent = `${c.pays?.nom} — ${c.pays?.titre}`;
   document.getElementById('cover-date').textContent = ed.date;
   document.getElementById('cover-num').textContent = '✦ ' + (c.pays?.nom || '');
 
   // Charger les photos Unsplash en parallèle
-  const [photoPays, photoArt, photoMusique, photoVivant] = await Promise.all([
-    getPhoto((c.pays?.photo_search || c.pays?.nom || '') + ' landscape', 'travel landscape'),
-    getPhoto((c.art?.oeuvre || '') + ' ' + (c.art?.artiste || '') + ' art', 'art museum painting'),
-    getPhoto((c.musique?.artiste || '') + ' music', 'music concert'),
-    getPhoto((c.vivant?.animal || '') + ' animal', 'animal wildlife nature'),
+  const [photoPays, photoArt, photoVivant] = await Promise.all([
+    getPhoto((c.pays?.photo_search || c.pays?.nom || '') + ' landscape nature', 'travel landscape'),
+    getPhoto('art painting museum gallery', 'art painting'),
+    getPhoto((c.vivant?.animal || 'animal') + ' wildlife', 'animal nature'),
   ]);
+  const photoMusique = null;
 
   // PAYS
   document.getElementById('s-pays').innerHTML = `

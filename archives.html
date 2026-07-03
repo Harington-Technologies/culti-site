@@ -85,6 +85,23 @@ nav { background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); padding: 1
 
 <script>
 const SUPABASE_URL = 'https://zuahstlswkprzdmflekg.supabase.co';
+
+// Convertir emoji drapeau en code ISO 2 lettres pour flagcdn.com
+function flagToISO(flag) {
+  if (!flag) return 'un';
+  try {
+    const codePoints = [...flag].map(c => c.codePointAt(0));
+    return codePoints.map(cp => String.fromCharCode(cp - 127397)).join('').toLowerCase();
+  } catch(e) { return 'un'; }
+}
+
+function flagImg(flag, size = 32) {
+  const iso = flagToISO(flag);
+  return `<img src="https://flagcdn.com/${size}x${Math.round(size*0.75)}/${iso}.png" 
+    alt="${flag}" 
+    style="width:${size}px;height:${Math.round(size*0.75)}px;object-fit:cover;border-radius:3px;vertical-align:middle;margin-right:8px;"
+    onerror="this.style.display='none'">`;
+}
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1YWhzdGxzd2twcnpkbWZsZWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDU2MjMsImV4cCI6MjA5NzAyMTYyM30.-F0WRbiprAa-Zt1ih1QdsQzuuqVW2froK6Ddfvrqoik';
 
 let allEditions = [];
@@ -124,7 +141,7 @@ function renderEditions(editions) {
     const idee = c.idee?.mot || '';
     return `<a class="edition-card" href="/edition.html?id=${e.id}">
       <div class="card-date">${e.date || ''}</div>
-      <div class="card-pays">${e.pays_flag || ''} ${e.pays_nom || 'Édition'}</div>
+      <div class="card-pays">${flagImg(e.pays_flag, 28)}${e.pays_nom || 'Édition'}</div>
       <div class="card-perso">${e.personnalite_nom || ''}</div>
       <div class="card-tags">
         ${art ? `<span class="card-tag">🎨 ${art}</span>` : ''}
