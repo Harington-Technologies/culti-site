@@ -333,9 +333,18 @@ async function getCount() {
     const count = Array.isArray(data) ? data.length : 0;
     document.getElementById('live-counter').textContent = count.toLocaleString('fr-FR');
     document.getElementById('proof-count').textContent = count.toLocaleString('fr-FR');
+
+    // Compter les éditions
+    const resEd = await fetch(`${SUPABASE_URL}/rest/v1/editions?select=id&audience=eq.adulte`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    const edData = await resEd.json();
+    const edEl = document.getElementById('proof-editions');
+    if (edEl) edEl.textContent = Array.isArray(edData) ? edData.length : '—';
+
   } catch(e) {
-    document.getElementById('live-counter').textContent = '4 800+';
-    document.getElementById('proof-count').textContent = '4 800+';
+    document.getElementById('live-counter').textContent = '—';
+    document.getElementById('proof-count').textContent = '—';
   }
 }
 
