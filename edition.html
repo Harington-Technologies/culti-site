@@ -270,6 +270,21 @@ nav { background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bo
 
 <script>
 const SB_URL = 'https://zuahstlswkprzdmflekg.supabase.co';
+const UNSPLASH_KEY = 'FIpZxO53Giw_tuvyYxGbgUpNKuF8Fx0--2OK4-eS0Tc';
+
+async function getPhoto(query, fallback = 'travel nature') {
+  try {
+    const res = await fetch(
+      `https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=landscape&content_filter=high`,
+      { headers: { 'Authorization': `Client-ID ${UNSPLASH_KEY}` } }
+    );
+    if (!res.ok) throw new Error('Unsplash error');
+    const data = await res.json();
+    return data.urls?.regular || '';
+  } catch(e) {
+    return '';
+  }
+}
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1YWhzdGxzd2twcnpkbWZsZWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDU2MjMsImV4cCI6MjA5NzAyMTYyM30.-F0WRbiprAa-Zt1ih1QdsQzuuqVW2froK6Ddfvrqoik';
 
 // Dégradés par pays — aucune dépendance externe
@@ -440,7 +455,10 @@ async function loadEditionForAudience(audience, date) {
       <div class="s-icon s-icon-coral">🌍</div>
       <div><div class="s-label s-label-coral">Le monde</div></div>
     </div>
-    <div style="width:100%;height:180px;background:${getCoverGradient(c.pays?.nom)};border-radius:12px;margin:0.75rem 0;display:flex;align-items:center;justify-content:center;font-size:72px;">${c.pays?.flag||'🌍'}</div>
+    ${photoPays 
+      ? `<img src="${photoPays}" alt="${h(c.pays?.nom)}" style="width:100%;height:220px;object-fit:cover;border-radius:12px;margin:0.75rem 0;display:block;">`
+      : `<div style="width:100%;height:180px;background:${getCoverGradient(c.pays?.nom)};border-radius:12px;margin:0.75rem 0;display:flex;align-items:center;justify-content:center;font-size:72px;">${c.pays?.flag||'🌍'}</div>`
+    }
     <div class="s-body">
       <div class="s-title">${h(c.pays?.nom)} — ${h(c.pays?.titre)}</div>
       <div class="s-text">${h(c.pays?.intro)}</div>
@@ -473,6 +491,7 @@ async function loadEditionForAudience(audience, date) {
     <div class="s-body">
       <div class="s-title">${h(c.art?.oeuvre)}</div>
       <div class="s-sub">${h(c.art?.artiste)}, ${h(c.art?.annee)}</div>
+      ${photoArt ? `<img src="${photoArt}" alt="${h(c.art?.oeuvre)}" style="width:100%;height:180px;object-fit:cover;border-radius:12px;margin-bottom:1rem;display:block;">` : ''}
       <div style="width:100%;height:160px;background:${SECTION_GRADIENTS.art};border-radius:12px;margin:0.75rem 0;display:flex;align-items:center;justify-content:center;font-size:56px;">🎨</div>
       <div class="s-text">${h(c.art?.description)}</div>
       ${c.art?.contexte ? `<div class="s-text" style="color:#718096;font-style:italic;">${h(c.art.contexte)}</div>` : ''}
@@ -489,6 +508,7 @@ async function loadEditionForAudience(audience, date) {
     <div class="s-body">
       <div class="s-title">${h(c.musique?.titre)}</div>
       <div class="s-sub">${h(c.musique?.artiste)}, ${h(c.musique?.annee)}</div>
+      ${photoMusique ? `<img src="${photoMusique}" alt="${h(c.musique?.artiste)}" style="width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:1rem;display:block;">` : ''}
       <div style="width:100%;height:160px;background:${SECTION_GRADIENTS.music};border-radius:12px;margin:0.75rem 0;display:flex;align-items:center;justify-content:center;font-size:56px;">🎵</div>
       <div class="s-text">${h(c.musique?.anecdote)}</div>
       ${c.musique?.pourquoi_ecouter ? `<div class="s-text">${h(c.musique.pourquoi_ecouter)}</div>` : ''}
@@ -515,6 +535,7 @@ async function loadEditionForAudience(audience, date) {
     </div>
     <div class="s-body">
       <div class="s-title">${h(c.vivant?.animal)}</div>
+      ${photoVivant ? `<img src="${photoVivant}" alt="${h(c.vivant?.animal)}" style="width:100%;height:180px;object-fit:cover;border-radius:12px;margin-bottom:1rem;display:block;">` : ''}
       <div style="width:100%;height:160px;background:${SECTION_GRADIENTS.nature};border-radius:12px;margin:0.75rem 0;display:flex;align-items:center;justify-content:center;font-size:56px;">🦁</div>
       <div class="s-text">${h(c.vivant?.fait1)}</div>
       <div class="s-text">${h(c.vivant?.fait2)}</div>
