@@ -449,6 +449,14 @@ async function loadEditionForAudience(audience, date) {
   document.getElementById('cover-date').textContent = ed.date;
   document.getElementById('cover-num').textContent = '✦ ' + (c.pays?.nom || '');
 
+  // Charger les photos Unsplash en parallèle
+  const [photoPays, photoArt, photoMusique, photoVivant] = await Promise.all([
+    getPhoto((c.pays?.photo_search || c.pays?.nom || '') + ' landscape', 'travel landscape'),
+    getPhoto((c.art?.oeuvre || '') + ' ' + (c.art?.artiste || '') + ' art', 'art museum painting'),
+    getPhoto((c.musique?.artiste || '') + ' music', 'music concert'),
+    getPhoto((c.vivant?.animal || '') + ' animal', 'animal wildlife nature'),
+  ]);
+
   // PAYS
   document.getElementById('s-pays').innerHTML = `
     <div class="s-header">
