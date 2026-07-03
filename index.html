@@ -272,8 +272,7 @@ footer { background: #FFF8F0; padding: 3rem 2rem; text-align: center; border-top
 
     <div class="social-proof">
       <div class="proof-item"><span class="proof-dot"></span><span id="proof-count">—</span> abonnés actifs</div>
-      <div class="proof-item"><span class="proof-dot"></span>547 éditions publiées</div>
-      <div class="proof-item"><span class="proof-dot"></span>Note 4,9 / 5 ⭐</div>
+      <div class="proof-item"><span class="proof-dot"></span><span id="proof-editions">—</span> éditions publiées</div>
     </div>
   </div>
 </section>
@@ -331,7 +330,7 @@ async function getCount() {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
     const data = await res.json();
-    const count = (Array.isArray(data) ? data.length : 0) + 4800;
+    const count = Array.isArray(data) ? data.length : 0;
     document.getElementById('live-counter').textContent = count.toLocaleString('fr-FR');
     document.getElementById('proof-count').textContent = count.toLocaleString('fr-FR');
   } catch(e) {
