@@ -355,7 +355,11 @@ function getCoverGradient(nom) {
 function getCoverImg(nom) { return getCoverGradient(nom); }
 function h(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function makeCoverDiv(gradient, flag, nom) {
-  return '<div style="width:100%;height:100%;background:' + gradient + ';display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;"><div style="font-size:80px;">' + flag + '</div><div style="font-size:22px;font-weight:900;color:white;text-shadow:0 2px 8px rgba(0,0,0,0.3);">' + nom + '</div></div>';
+  const iso = flagToISO(flag);
+  return '<div style="width:100%;height:100%;background:' + gradient + ';display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">' +
+    '<img src="https://flagcdn.com/80x60/' + iso + '.png" alt="' + nom + '" style="width:80px;height:60px;object-fit:cover;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.4);" onerror="this.style.display='none'">' +
+    '<div style="font-size:24px;font-weight:900;color:white;text-shadow:0 2px 8px rgba(0,0,0,0.5);">' + nom + '</div>' +
+    '</div>';
 }
 
 let currentAudience = 'adulte';
