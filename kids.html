@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Culti Kids — Apprends une chose cool chaque jour !</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --coral: #FF6B6B; --teal: #4ECDC4; --yellow: #FFE66D; --purple: #A78BFA; --green: #6EE7B7; --orange: #FB923C; --ink: #1A1A2E; --white: #FFFFFF; }
+body { font-family: 'Nunito', sans-serif; background: #FFF9F0; color: var(--ink); overflow-x: hidden; }
+
+/* NAV */
+nav { background: white; border-bottom: 4px solid var(--yellow); padding: 0.75rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-mark { width: 40px; height: 40px; border-radius: 12px; background: var(--coral); display: flex; align-items: center; justify-content: center; font-family: 'Fredoka One', cursive; font-size: 22px; color: white; box-shadow: 0 4px 0 #D94F4F; }
+.nav-name { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--ink); }
+.nav-name span { color: var(--coral); }
+.nav-score { background: var(--yellow); border-radius: 50px; padding: 6px 16px; font-size: 14px; font-weight: 900; border: 2px solid #F0D800; }
+.nav-links { display: flex; gap: 1rem; list-style: none; }
+.nav-links a { font-size: 14px; font-weight: 800; color: var(--ink); text-decoration: none; }
+.nav-links a:hover { color: var(--coral); }
+
+/* HERO */
+#hero { background: linear-gradient(135deg, #FF6B6B 0%, #FF9F1C 50%, #FFE66D 100%); min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 6rem 2rem 4rem; position: relative; overflow: hidden; border-radius: 0 0 40px 40px; }
+.hero-blob { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.2; }
+.blob1 { width: 400px; height: 400px; background: white; top: -100px; right: -100px; }
+.blob2 { width: 300px; height: 300px; background: var(--purple); bottom: -50px; left: -50px; }
+
+.hero-mascot { font-size: 80px; margin-bottom: 1rem; animation: float 3s ease-in-out infinite; display: block; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+.hero-title { font-family: 'Fredoka One', cursive; font-size: clamp(36px, 6vw, 64px); color: white; line-height: 1.1; margin-bottom: 1rem; text-shadow: 0 3px 12px rgba(0,0,0,0.2); }
+.hero-title span { color: var(--ink); }
+.hero-sub { font-size: 18px; color: rgba(255,255,255,0.9); max-width: 500px; line-height: 1.7; margin-bottom: 2.5rem; font-weight: 700; }
+
+.hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+.btn-white { background: white; color: var(--coral); border: none; padding: 1rem 2rem; border-radius: 50px; font-size: 16px; font-weight: 900; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 6px 0 rgba(0,0,0,0.15); transition: transform 0.1s; font-family: 'Nunito', sans-serif; }
+.btn-white:hover { transform: translateY(-3px); }
+.btn-white:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
+.btn-dark { background: var(--ink); color: white; border: none; padding: 1rem 2rem; border-radius: 50px; font-size: 16px; font-weight: 900; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 6px 0 rgba(0,0,0,0.3); transition: transform 0.1s; font-family: 'Nunito', sans-serif; }
+.btn-dark:hover { transform: translateY(-3px); }
+
+.hero-stats { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
+.hero-stat { text-align: center; }
+.hero-stat-num { font-family: 'Fredoka One', cursive; font-size: 32px; color: white; }
+.hero-stat-label { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 700; }
+
+/* RUBRIQUES */
+#rubriques { padding: 5rem 2rem; max-width: 1000px; margin: 0 auto; }
+.section-title { font-family: 'Fredoka One', cursive; font-size: 36px; color: var(--ink); text-align: center; margin-bottom: 0.5rem; }
+.section-sub { font-size: 16px; color: #718096; text-align: center; margin-bottom: 3rem; font-weight: 700; }
+.rubriques-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
+.rubrique-card { background: white; border-radius: 20px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 3px solid transparent; box-shadow: 0 4px 0 rgba(0,0,0,0.08); }
+.rubrique-card:hover { transform: translateY(-6px); box-shadow: 0 10px 0 rgba(0,0,0,0.08); }
+.rubrique-emoji { font-size: 36px; margin-bottom: 8px; display: block; }
+.rubrique-name { font-family: 'Fredoka One', cursive; font-size: 15px; color: var(--ink); }
+
+/* WORLD MAP */
+#carte { padding: 5rem 2rem; background: white; border-radius: 40px; margin: 2rem; }
+.map-wrap { max-width: 900px; margin: 0 auto; }
+.map-title { font-family: 'Fredoka One', cursive; font-size: 32px; color: var(--ink); text-align: center; margin-bottom: 0.5rem; }
+.map-sub { font-size: 15px; color: #718096; text-align: center; margin-bottom: 2rem; font-weight: 700; }
+.world-map-container { position: relative; border-radius: 24px; overflow: hidden; background: #E0F7F6; border: 4px solid var(--teal); padding: 1rem; }
+.visited-countries { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.5rem; justify-content: center; }
+.country-badge { display: flex; align-items: center; gap: 6px; background: #FFF9F0; border: 2px solid #FFE5D0; border-radius: 50px; padding: 6px 14px; font-size: 13px; font-weight: 800; cursor: pointer; transition: all 0.15s; text-decoration: none; color: var(--ink); }
+.country-badge:hover { border-color: var(--coral); background: #FFE5D0; }
+.country-badge img { width: 24px; height: 18px; object-fit: cover; border-radius: 3px; }
+
+/* GAMIFICATION */
+#badges-section { padding: 5rem 2rem; max-width: 900px; margin: 0 auto; }
+.badges-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+.badge-card { background: white; border-radius: 20px; padding: 1.5rem 1rem; text-align: center; border: 3px solid #FFE5D0; box-shadow: 0 4px 0 rgba(0,0,0,0.06); }
+.badge-card.unlocked { border-color: var(--teal); background: #E6FFFA; }
+.badge-card.locked { opacity: 0.5; }
+.badge-emoji { font-size: 40px; margin-bottom: 8px; display: block; }
+.badge-name { font-family: 'Fredoka One', cursive; font-size: 15px; color: var(--ink); margin-bottom: 4px; }
+.badge-desc { font-size: 12px; color: #718096; font-weight: 700; }
+
+/* NEWSLETTER */
+#newsletter { background: var(--ink); padding: 5rem 2rem; text-align: center; border-radius: 40px; margin: 2rem; }
+.nl-title { font-family: 'Fredoka One', cursive; font-size: 36px; color: white; margin-bottom: 1rem; }
+.nl-sub { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 2rem; font-weight: 700; }
+.nl-form { display: flex; gap: 10px; max-width: 440px; margin: 0 auto; }
+.nl-input { flex: 1; padding: 1rem 1.25rem; border: 3px solid rgba(255,255,255,0.2); border-radius: 50px; font-size: 15px; font-family: 'Nunito', sans-serif; background: rgba(255,255,255,0.1); color: white; outline: none; }
+.nl-input::placeholder { color: rgba(255,255,255,0.4); }
+.nl-input:focus { border-color: var(--yellow); }
+.nl-btn { background: var(--coral); color: white; border: none; padding: 1rem 1.5rem; border-radius: 50px; font-size: 14px; font-weight: 900; cursor: pointer; white-space: nowrap; font-family: 'Nunito', sans-serif; box-shadow: 0 4px 0 #D94F4F; }
+.nl-status { font-size: 14px; font-weight: 800; min-height: 20px; margin-top: 0.75rem; }
+.nl-status.success { color: var(--teal); }
+.nl-status.error { color: var(--coral); }
+
+/* FOOTER */
+footer { background: #12121F; padding: 2rem; text-align: center; }
+.footer-logo { font-family: 'Fredoka One', cursive; font-size: 24px; color: white; margin-bottom: 0.5rem; }
+.footer-logo span { color: var(--coral); }
+.footer-links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin: 1rem 0; }
+.footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; font-weight: 700; }
+.footer-links a:hover { color: var(--coral); }
+.footer-copy { font-size: 11px; color: rgba(255,255,255,0.2); }
+
+/* TOAST */
+.toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--teal); color: var(--ink); padding: 1rem 2rem; border-radius: 50px; font-size: 15px; font-weight: 900; font-family: 'Fredoka One', cursive; transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); z-index: 200; white-space: nowrap; box-shadow: 0 6px 0 rgba(0,0,0,0.2); }
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 640px) { nav { padding: 0.75rem 1rem; } .hero-stats { gap: 1rem; } #carte, #newsletter { margin: 1rem; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-mark">C</div>
+    <div class="nav-name">culti<span>kids</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#rubriques">Rubriques</a></li>
+    <li><a href="#carte">Carte</a></li>
+    <li><a href="archives.html">Archives</a></li>
+  </ul>
+  <div class="nav-score">⭐ <span id="nav-score">0</span> pts</div>
+</nav>
+
+<section id="hero">
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+  <span class="hero-mascot">🌍</span>
+  <h1 class="hero-title">Apprends une chose<br><span>cool</span> chaque matin !</h1>
+  <p class="hero-sub">Chaque jour, un nouveau pays, une histoire incroyable, une œuvre d'art et un quiz pour tester tes connaissances. En seulement 10 minutes !</p>
+  <div class="hero-btns">
+    <a href="edition-kids.html" class="btn-white">📖 Lire l'édition du jour</a>
+    <a href="#newsletter" class="btn-dark">✉️ Recevoir Culti chaque matin</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="stat-abonnes">—</div>
+      <div class="hero-stat-label">lecteurs actifs</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="stat-editions">—</div>
+      <div class="hero-stat-label">éditions publiées</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">195</div>
+      <div class="hero-stat-label">pays à explorer</div>
+    </div>
+  </div>
+</section>
+
+<section id="rubriques">
+  <div class="section-title">🗺️ Ce qu'on explore chaque jour</div>
+  <div class="section-sub">Une nouvelle aventure culturelle à chaque édition !</div>
+  <div class="rubriques-grid">
+    <div class="rubrique-card" style="border-color:#FFCFB3;">
+      <span class="rubrique-emoji">🌍</span>
+      <div class="rubrique-name">Un pays</div>
+    </div>
+    <div class="rubrique-card" style="border-color:#A8E6E3;">
+      <span class="rubrique-emoji">👤</span>
+      <div class="rubrique-name">Un génie</div>
+    </div>
+    <div class="rubrique-card" style="border-color:#C4B5FD;">
+      <span class="rubrique-emoji">🎨</span>
+      <div class="rubrique-name">Une œuvre</div>
+    </div>
+    <div class="rubrique-card" style="border-color:#FFD700;">
+      <span class="rubrique-emoji">🎵</span>
+      <div class="rubrique-name">Une musique</div>
+    </div>
+    <div class="rubrique-card" style="border-color:#6EE7B7;">
+      <span class="rubrique-emoji">🦁</span>
+      <div class="rubrique-name">Un animal</div>
+    </div>
+    <div class="rubrique-card" style="border-color:#FCA5A5;">
+      <span class="rubrique-emoji">🧠</span>
+      <div class="rubrique-name">Une idée</div>
+    </div>
+    <div class="rubrique-card" style="border-color:#FFE66D;">
+      <span class="rubrique-emoji">🧩</span>
+      <div class="rubrique-name">Une énigme</div>
+    </div>
+    <div class="rubrique-card" style="border-color:#FF6B6B;">
+      <span class="rubrique-emoji">🎯</span>
+      <div class="rubrique-name">Un quiz</div>
+    </div>
+  </div>
+</section>
+
+<section id="carte">
+  <div class="map-wrap">
+    <div class="map-title">🗺️ Pays déjà explorés</div>
+    <div class="map-sub">Clique sur un pays pour relire son édition !</div>
+    <div class="visited-countries" id="visited-countries">
+      <div style="font-size:14px;color:#718096;font-weight:700;">Chargement des pays...</div>
+    </div>
+  </div>
+</section>
+
+<section id="badges-section">
+  <div class="section-title">🏆 Tes badges</div>
+  <div class="section-sub">Débloque des badges en lisant et en jouant !</div>
+  <div class="badges-grid" id="badges-grid">
+    <div class="badge-card" id="badge-premier">
+      <span class="badge-emoji">🌟</span>
+      <div class="badge-name">Premier pas</div>
+      <div class="badge-desc">Lire sa première édition</div>
+    </div>
+    <div class="badge-card" id="badge-quiz">
+      <span class="badge-emoji">🧠</span>
+      <div class="badge-name">Quiz master</div>
+      <div class="badge-desc">5/5 au quiz</div>
+    </div>
+    <div class="badge-card" id="badge-explorer">
+      <span class="badge-emoji">🗺️</span>
+      <div class="badge-name">Explorateur</div>
+      <div class="badge-desc">5 pays visités</div>
+    </div>
+    <div class="badge-card" id="badge-globe">
+      <span class="badge-emoji">🌍</span>
+      <div class="badge-name">Citoyen du monde</div>
+      <div class="badge-desc">10 pays visités</div>
+    </div>
+    <div class="badge-card" id="badge-streak">
+      <span class="badge-emoji">🔥</span>
+      <div class="badge-name">Régulier</div>
+      <div class="badge-desc">7 jours de suite</div>
+    </div>
+    <div class="badge-card" id="badge-score">
+      <span class="badge-emoji">⭐</span>
+      <div class="badge-name">Étoile montante</div>
+      <div class="badge-desc">500 points</div>
+    </div>
+  </div>
+</section>
+
+<section id="newsletter">
+  <div class="nl-title">☀️ Reçois Culti chaque matin !</div>
+  <div class="nl-sub">Gratuit · Sans pub · Une édition par jour à 7h</div>
+  <div class="nl-form">
+    <input type="email" id="email-input" class="nl-input" placeholder="ton@email.com">
+    <button class="nl-btn" onclick="subscribe()">S'abonner →</button>
+  </div>
+  <div class="nl-status" id="nl-status"></div>
+</section>
+
+<footer>
+  <div class="footer-logo">culti<span>kids</span></div>
+  <div class="footer-links">
+    <a href="edition-kids.html">Édition du jour</a>
+    <a href="archives.html">Archives</a>
+    <a href="unsubscribe.html">Se désabonner</a>
+  </div>
+  <div class="footer-copy">© 2026 Culti · Tous droits réservés</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SB_URL = 'https://zuahstlswkprzdmflekg.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1YWhzdGxzd2twcnpkbWZsZWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDU2MjMsImV4cCI6MjA5NzAyMTYyM30.-F0WRbiprAa-Zt1ih1QdsQzuuqVW2froK6Ddfvrqoik';
+
+// Score depuis localStorage
+const score = parseInt(localStorage.getItem('culti_score') || '0');
+document.getElementById('nav-score').textContent = score;
+
+// Badges
+function updateBadges(editions, score) {
+  if (editions >= 1) document.getElementById('badge-premier').classList.add('unlocked');
+  if (editions >= 5) document.getElementById('badge-explorer').classList.add('unlocked');
+  if (editions >= 10) document.getElementById('badge-globe').classList.add('unlocked');
+  if (score >= 500) document.getElementById('badge-score').classList.add('unlocked');
+  // Vérifier quiz master et streak depuis localStorage
+  if (localStorage.getItem('culti_perfect_quiz')) document.getElementById('badge-quiz').classList.add('unlocked');
+  const streak = parseInt(localStorage.getItem('culti_streak') || '0');
+  if (streak >= 7) document.getElementById('badge-streak').classList.add('unlocked');
+}
+
+function flagToISO(flag) {
+  if (!flag) return 'un';
+  try { return [...flag].map(c => String.fromCharCode(c.codePointAt(0) - 127397)).join('').toLowerCase(); }
+  catch(e) { return 'un'; }
+}
+
+async function loadData() {
+  try {
+    // Abonnés
+    const r1 = await fetch(`${SB_URL}/rest/v1/subscribers?select=id&active=eq.true`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    const subs = await r1.json();
+    document.getElementById('stat-abonnes').textContent = Array.isArray(subs) ? subs.length : '—';
+
+    // Éditions + pays visités
+    const r2 = await fetch(`${SB_URL}/rest/v1/editions?select=id,date,pays_nom,pays_flag&audience=eq.adulte&order=created_at.desc`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    const editions = await r2.json();
+    document.getElementById('stat-editions').textContent = Array.isArray(editions) ? editions.length : '—';
+
+    // Afficher les pays visités
+    if (Array.isArray(editions)) {
+      updateBadges(editions.length, score);
+      const container = document.getElementById('visited-countries');
+      container.innerHTML = editions.map(ed => {
+        const iso = flagToISO(ed.pays_flag);
+        return `<a href="edition-kids.html?id=${ed.id}" class="country-badge">
+          <img src="https://flagcdn.com/24x18/${iso}.png" alt="${ed.pays_nom}" width="24" height="18" style="object-fit:cover;border-radius:3px;">
+          ${ed.pays_nom}
+        </a>`;
+      }).join('');
+    }
+  } catch(e) { console.error(e); }
+}
+
+async function subscribe() {
+  const email = document.getElementById('email-input').value.trim();
+  const status = document.getElementById('nl-status');
+  if (!email || !email.includes('@')) {
+    status.textContent = 'Entre une adresse email valide !';
+    status.className = 'nl-status error';
+    return;
+  }
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/subscribers`, {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ email })
+    });
+    if (res.status === 201) {
+      status.textContent = '🎉 Bienvenue ! Ta première édition arrive demain à 7h !';
+      status.className = 'nl-status success';
+      document.getElementById('email-input').value = '';
+      showToast('Bienvenue dans Culti ! ☀️');
+    } else if (res.status === 409) {
+      status.textContent = '✓ Tu es déjà inscrit — à demain !';
+      status.className = 'nl-status success';
+    } else { throw new Error(); }
+  } catch(e) {
+    status.textContent = 'Une erreur est survenue. Réessaie !';
+    status.className = 'nl-status error';
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+document.getElementById('email-input').addEventListener('keydown', e => { if (e.key === 'Enter') subscribe(); });
+loadData();
+</script>
+</body>
+</html>

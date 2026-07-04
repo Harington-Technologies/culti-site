@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Culti Kids — Édition du jour</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --coral: #FF6B6B; --teal: #4ECDC4; --yellow: #FFE66D; --purple: #A78BFA;
+  --green: #6EE7B7; --orange: #FB923C; --pink: #F472B6; --blue: #60A5FA;
+  --ink: #1A1A2E; --white: #FFFFFF; --bg: #FFF9F0;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
+
+/* NAV */
+nav { background: white; border-bottom: 4px solid var(--yellow); padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-mark { width: 40px; height: 40px; border-radius: 12px; background: var(--coral); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: white; font-family: 'Fredoka One', cursive; box-shadow: 0 4px 0 #D94F4F; }
+.nav-name { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--ink); }
+.nav-name span { color: var(--coral); }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-score { background: var(--yellow); border-radius: 50px; padding: 6px 16px; font-size: 14px; font-weight: 900; color: var(--ink); border: 2px solid #F0D800; }
+.nav-back { font-size: 13px; color: var(--coral); text-decoration: none; font-weight: 800; border: 2px solid var(--coral); border-radius: 50px; padding: 5px 14px; transition: all 0.15s; }
+.nav-back:hover { background: var(--coral); color: white; }
+
+/* HERO COVER */
+.cover { position: relative; height: 320px; overflow: hidden; border-radius: 0 0 32px 32px; }
+.cover-img { width: 100%; height: 100%; object-fit: cover; }
+.cover-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%); }
+.cover-gradient { position: absolute; inset: 0; }
+.cover-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; text-align: center; }
+.cover-flag-img { width: 64px; height: 48px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
+.cover-badge { display: inline-block; background: var(--yellow); color: var(--ink); font-size: 12px; font-weight: 900; padding: 4px 14px; border-radius: 50px; margin-bottom: 8px; font-family: 'Fredoka One', cursive; }
+.cover-title { font-family: 'Fredoka One', cursive; font-size: clamp(22px, 4vw, 36px); color: white; line-height: 1.2; margin-bottom: 4px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.cover-date { font-size: 13px; color: rgba(255,255,255,0.75); font-weight: 700; }
+
+/* PROGRESS */
+.progress-wrap { background: white; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #FFE5D0; }
+.progress-label { font-size: 13px; font-weight: 800; color: var(--ink); white-space: nowrap; }
+.progress-track { flex: 1; background: #FFE5D0; border-radius: 20px; height: 12px; overflow: hidden; }
+.progress-fill { background: linear-gradient(90deg, var(--coral), var(--orange)); height: 100%; border-radius: 20px; transition: width 0.6s ease; width: 0%; }
+.progress-count { font-size: 13px; font-weight: 900; color: var(--coral); white-space: nowrap; }
+
+/* AUDIENCE BAR */
+.audience-bar { background: white; padding: 0.75rem 1.5rem; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #FFE5D0; flex-wrap: wrap; }
+.audience-label { font-size: 12px; font-weight: 900; color: var(--ink); text-transform: uppercase; letter-spacing: 0.08em; }
+.audience-btn { border: 2px solid #FFE5D0; background: white; border-radius: 50px; padding: 6px 16px; font-size: 13px; font-weight: 800; cursor: pointer; font-family: 'Nunito', sans-serif; color: var(--ink); transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
+.audience-btn:hover { border-color: var(--coral); }
+.audience-btn.active { background: var(--coral); border-color: var(--coral); color: white; transform: scale(1.05); }
+
+/* PAGE */
+.page { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 5rem; }
+
+/* SECTION CARDS */
+.s-card { border-radius: 24px; margin-bottom: 1.25rem; overflow: hidden; box-shadow: 0 4px 0 rgba(0,0,0,0.08); }
+.s-header { display: flex; align-items: center; gap: 12px; padding: 1rem 1.25rem 0.75rem; }
+.s-emoji { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.s-label { font-family: 'Fredoka One', cursive; font-size: 16px; }
+.s-body { padding: 0 1.25rem 1.5rem; }
+.s-img { width: 100%; height: 200px; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; display: block; }
+.s-title { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--ink); margin-bottom: 8px; line-height: 1.25; }
+.s-text { font-size: 15px; color: #374151; line-height: 1.8; margin-bottom: 10px; font-weight: 600; }
+
+/* Color themes per section */
+.card-monde { background: linear-gradient(135deg, #FFF0E0, #FFE5D0); border: 3px solid #FFCFB3; }
+.card-monde .s-emoji { background: #FFE5D0; }
+.card-monde .s-label { color: #E05252; }
+
+.card-perso { background: linear-gradient(135deg, #E0F7F6, #C8F0EE); border: 3px solid #A8E6E3; }
+.card-perso .s-emoji { background: #C8F0EE; }
+.card-perso .s-label { color: #0E9488; }
+
+.card-art { background: linear-gradient(135deg, #EDE9FE, #DDD6FE); border: 3px solid #C4B5FD; }
+.card-art .s-emoji { background: #DDD6FE; }
+.card-art .s-label { color: #7C3AED; }
+
+.card-musique { background: linear-gradient(135deg, #FFF3CC, #FFE97A); border: 3px solid #FFD700; }
+.card-musique .s-emoji { background: #FFE97A; }
+.card-musique .s-label { color: #B45309; }
+
+.card-idee { background: var(--ink); border: 3px solid #2D2D4E; }
+.card-idee .s-emoji { background: rgba(78,205,196,0.2); }
+.card-idee .s-label { color: var(--teal); }
+.card-idee .s-title { color: white; }
+.card-idee .s-text { color: rgba(255,255,255,0.8); }
+
+.card-vivant { background: linear-gradient(135deg, #D1FAE5, #A7F3D0); border: 3px solid #6EE7B7; }
+.card-vivant .s-emoji { background: #A7F3D0; }
+.card-vivant .s-label { color: #059669; }
+
+/* STAT PILL */
+.stat-pill { display: inline-flex; align-items: center; gap: 10px; background: var(--ink); border-radius: 50px; padding: 8px 18px; margin: 8px 0 12px; }
+.stat-num { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--teal); }
+.stat-txt { font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 700; }
+
+/* LECON */
+.lecon { background: white; border-left: 5px solid var(--coral); border-radius: 0 14px 14px 0; padding: 10px 16px; margin-top: 10px; font-size: 14px; font-weight: 800; color: var(--ink); font-style: italic; }
+
+/* DEFI */
+.defi { background: var(--teal); border-radius: 14px; padding: 12px 16px; margin-top: 10px; font-size: 14px; font-weight: 800; color: white; }
+.defi::before { content: "✦ Défi — "; }
+
+/* INFO TAGS */
+.info-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.info-tag { background: rgba(255,255,255,0.7); border-radius: 50px; padding: 5px 12px; font-size: 12px; font-weight: 800; color: var(--ink); border: 2px solid rgba(0,0,0,0.08); }
+
+/* CULTURAL BOXES */
+.cultural-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+.cultural-box { background: rgba(255,255,255,0.7); border-radius: 14px; padding: 10px 12px; }
+.cultural-box-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: var(--coral); margin-bottom: 4px; }
+.cultural-box-value { font-size: 14px; font-weight: 800; color: var(--ink); line-height: 1.4; }
+
+/* CITATION */
+.citation-card { background: var(--yellow); border-radius: 24px; padding: 1.5rem; margin-bottom: 1.25rem; text-align: center; border: 3px solid #F0D800; box-shadow: 0 4px 0 #D4BF00; }
+.citation-q { font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--ink); line-height: 1.5; margin-bottom: 8px; }
+.citation-author { font-size: 14px; font-weight: 900; color: #8B6914; }
+.citation-modern { font-size: 13px; color: #6B5000; font-style: italic; margin-top: 6px; font-weight: 700; }
+
+/* ENIGME */
+.enigme-card { background: var(--purple); border-radius: 24px; padding: 1.5rem; margin-bottom: 1.25rem; text-align: center; border: 3px solid #8B5CF6; box-shadow: 0 4px 0 #7C3AED; }
+.enigme-emoji { font-size: 40px; margin-bottom: 10px; }
+.enigme-q { font-family: 'Fredoka One', cursive; font-size: 18px; color: white; line-height: 1.5; margin-bottom: 14px; }
+.enigme-btn { background: white; color: var(--purple); border: none; padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 900; cursor: pointer; font-family: 'Nunito', sans-serif; box-shadow: 0 4px 0 rgba(0,0,0,0.2); transition: transform 0.1s; }
+.enigme-btn:hover { transform: scale(1.05); }
+.enigme-btn:active { transform: scale(0.97) translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+.enigme-rep { font-family: 'Fredoka One', cursive; font-size: 18px; color: var(--yellow); margin-top: 12px; display: none; }
+
+/* QUIZ */
+.quiz-card { background: white; border-radius: 24px; margin-bottom: 1.25rem; overflow: hidden; border: 3px solid var(--coral); box-shadow: 0 4px 0 #D94F4F; }
+.quiz-header { background: var(--coral); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+.quiz-title { font-family: 'Fredoka One', cursive; font-size: 20px; color: white; }
+.quiz-badge { background: rgba(255,255,255,0.25); color: white; font-size: 12px; font-weight: 900; padding: 4px 12px; border-radius: 50px; }
+.quiz-prog-track { background: #FFE5D0; height: 8px; }
+.quiz-prog-fill { background: linear-gradient(90deg, var(--coral), var(--orange)); height: 100%; transition: width 0.4s ease; width: 0%; }
+.quiz-body { padding: 1.25rem; }
+.q-num { font-size: 12px; color: #999; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.q-text { font-family: 'Fredoka One', cursive; font-size: 18px; color: var(--ink); margin-bottom: 1rem; line-height: 1.4; }
+.q-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+.q-opt { background: #FFF9F0; border: 3px solid #FFE5D0; border-radius: 16px; padding: 12px 10px; font-size: 14px; font-weight: 800; cursor: pointer; text-align: center; color: var(--ink); font-family: 'Nunito', sans-serif; transition: all 0.15s; box-shadow: 0 3px 0 #FFD0B0; }
+.q-opt:hover { background: #FFE5D0; border-color: var(--coral); transform: translateY(-2px); }
+.q-opt:active { transform: translateY(1px); box-shadow: 0 1px 0 #FFD0B0; }
+.q-opt.correct { background: #D1FAE5; border-color: #34D399; color: #065F46; box-shadow: 0 3px 0 #059669; }
+.q-opt.wrong { background: #FEE2E2; border-color: #F87171; color: #991B1B; box-shadow: 0 3px 0 #DC2626; }
+.q-feedback { font-size: 14px; font-weight: 800; color: var(--ink); margin-bottom: 10px; padding: 10px 14px; background: #FFF9F0; border-radius: 12px; display: none; }
+.q-nav { display: flex; align-items: center; justify-content: space-between; }
+.q-score { font-size: 14px; font-weight: 900; color: var(--coral); }
+.q-next { background: var(--coral); color: white; border: none; padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 900; cursor: pointer; font-family: 'Nunito', sans-serif; display: none; box-shadow: 0 4px 0 #D94F4F; transition: transform 0.1s; }
+.q-next:hover { transform: scale(1.04); }
+
+/* RÉSULTAT */
+.result-box { text-align: center; padding: 1.5rem; display: none; }
+.result-emoji { font-size: 72px; margin-bottom: 10px; display: block; animation: bounce 0.6s ease infinite alternate; }
+@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+.result-score { font-family: 'Fredoka One', cursive; font-size: 56px; color: var(--coral); }
+.result-label { font-family: 'Fredoka One', cursive; font-size: 22px; color: var(--ink); margin: 6px 0 16px; }
+.badges { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+.badge { border: 3px solid #FFE5D0; border-radius: 14px; padding: 8px 16px; font-size: 13px; font-weight: 900; background: #FFF9F0; }
+.badge.earned { border-color: var(--teal); color: #0E7490; background: #CCFBF1; }
+
+/* YT BUTTON */
+.yt-btn { display: inline-flex; align-items: center; gap: 8px; background: #FF0000; color: white; border-radius: 50px; padding: 10px 20px; font-size: 14px; font-weight: 900; text-decoration: none; margin-top: 10px; box-shadow: 0 4px 0 #B00000; transition: transform 0.1s; }
+.yt-btn:hover { transform: scale(1.04); }
+
+/* CONFETTI */
+.confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }
+.confetti-piece { position: absolute; width: 12px; height: 12px; top: -20px; animation: confettiFall linear forwards; border-radius: 2px; }
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* NAV BOTTOM */
+.nav-bottom { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0 0; border-top: 3px solid #FFE5D0; flex-wrap: wrap; gap: 1rem; }
+.btn-back-bottom { background: white; color: var(--ink); text-decoration: none; padding: 10px 20px; border-radius: 50px; font-size: 14px; font-weight: 900; border: 3px solid #FFE5D0; box-shadow: 0 4px 0 #FFD0B0; }
+.btn-sub-bottom { background: var(--coral); color: white; text-decoration: none; padding: 10px 20px; border-radius: 50px; font-size: 14px; font-weight: 900; box-shadow: 0 4px 0 #D94F4F; }
+
+/* STREAK */
+.streak-bar { background: linear-gradient(135deg, var(--orange), var(--coral)); border-radius: 20px; padding: 12px 20px; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 12px; }
+.streak-emoji { font-size: 28px; }
+.streak-text { color: white; }
+.streak-title { font-family: 'Fredoka One', cursive; font-size: 16px; }
+.streak-sub { font-size: 12px; opacity: 0.85; font-weight: 700; }
+
+.loading-state { text-align: center; padding: 4rem 2rem; font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--coral); }
+
+@media (max-width: 480px) {
+  .q-opts { grid-template-columns: 1fr; }
+  .cultural-grid { grid-template-columns: 1fr; }
+  .cover { height: 260px; }
+}
+</style>
+</head>
+<body>
+
+<div class="confetti-container" id="confetti-container"></div>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-mark">C</div>
+    <div class="nav-name">culti<span>kids</span></div>
+  </a>
+  <div class="nav-right">
+    <div class="nav-score">⭐ <span id="total-score">0</span> pts</div>
+    <a href="archives.html" class="nav-back">← Archives</a>
+  </div>
+</nav>
+
+<div id="loading-state" class="loading-state">☀️ Chargement de l'édition...</div>
+
+<div id="content" style="display:none;">
+  <div class="cover">
+    <img class="cover-img" id="cover-img" src="" alt="">
+    <div class="cover-overlay"></div>
+    <div class="cover-content">
+      <img id="cover-flag-img" src="" alt="" class="cover-flag-img">
+      <div class="cover-badge" id="cover-badge">Édition du jour</div>
+      <h1 class="cover-title" id="cover-title"></h1>
+      <div class="cover-date" id="cover-date"></div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <span class="progress-label">🗺️ Progression</span>
+    <div class="progress-track"><div class="progress-fill" id="read-prog"></div></div>
+    <span class="progress-count" id="read-count">0 / 8</span>
+  </div>
+
+  <div class="audience-bar">
+    <span class="audience-label">Version :</span>
+    <button class="audience-btn" onclick="switchAudience('enfant', this)">🧒 Enfant</button>
+    <button class="audience-btn" onclick="switchAudience('ado', this)">🎧 Ado</button>
+    <button class="audience-btn active" onclick="switchAudience('adulte', this)">📰 Adulte</button>
+    <button class="audience-btn" onclick="switchAudience('senior', this)">🎭 Sénior</button>
+  </div>
+
+  <div class="page">
+    <!-- Streak -->
+    <div class="streak-bar">
+      <div class="streak-emoji">🔥</div>
+      <div class="streak-text">
+        <div class="streak-title">Tu es là aujourd'hui — continue !</div>
+        <div class="streak-sub">Lis l'édition complète pour gagner des points ⭐</div>
+      </div>
+    </div>
+
+    <div class="s-card card-monde" id="s-pays"></div>
+    <div class="s-card card-perso" id="s-perso"></div>
+    <div class="s-card card-art" id="s-art"></div>
+    <div class="s-card card-musique" id="s-musique"></div>
+    <div class="s-card card-idee" id="s-idee"></div>
+    <div class="s-card card-vivant" id="s-vivant"></div>
+    <div class="citation-card" id="s-citation"></div>
+
+    <div class="enigme-card" id="s-enigme"></div>
+
+    <div class="quiz-card" id="s-quiz">
+      <div class="quiz-header">
+        <div class="quiz-title">🎯 Quiz du jour !</div>
+        <div class="quiz-badge" id="quiz-badge">5 questions</div>
+      </div>
+      <div class="quiz-prog-track"><div class="quiz-prog-fill" id="quiz-prog"></div></div>
+      <div class="quiz-body">
+        <div id="quiz-display">
+          <div class="q-num" id="q-num">Question 1 sur 5</div>
+          <div class="q-text" id="q-text"></div>
+          <div class="q-opts" id="q-opts"></div>
+          <div class="q-feedback" id="q-feedback"></div>
+          <div class="q-nav">
+            <div class="q-score" id="q-score">⭐ 0 / 5</div>
+            <button class="q-next" id="q-next" onclick="nextQ()">Suivant →</button>
+          </div>
+        </div>
+        <div class="result-box" id="quiz-result">
+          <span class="result-emoji" id="res-emoji">🎉</span>
+          <div class="result-score" id="res-score"></div>
+          <div class="result-label" id="res-label"></div>
+          <div class="badges" id="res-badges"></div>
+          <p style="font-size:14px;color:#718096;margin-top:1rem;font-weight:700;">Points ajoutés à ton score ! ⭐</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-bottom">
+      <a href="archives.html" class="btn-back-bottom">← Toutes les éditions</a>
+      <a href="/#newsletter" class="btn-sub-bottom">S'abonner ☀️</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const SB_URL = 'https://zuahstlswkprzdmflekg.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1YWhzdGxzd2twcnpkbWZsZWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDU2MjMsImV4cCI6MjA5NzAyMTYyM30.-F0WRbiprAa-Zt1ih1QdsQzuuqVW2froK6Ddfvrqoik';
+const UNSPLASH_KEY = 'FIpZxO53Giw_tuvyYxGbgUpNKuF8Fx0--2OK4-eS0Tc';
+
+let totalScore = parseInt(localStorage.getItem('culti_score') || '0');
+let quizData = [], cur = 0, correct = 0, answered = false;
+let sectionsRead = 0;
+let currentAudience = 'adulte';
+let currentDate = null;
+
+// Score
+document.getElementById('total-score').textContent = totalScore;
+
+function addScore(pts) {
+  totalScore += pts;
+  localStorage.setItem('culti_score', totalScore);
+  document.getElementById('total-score').textContent = totalScore;
+  showScorePopup('+' + pts + ' pts ⭐');
+}
+
+function showScorePopup(text) {
+  const el = document.createElement('div');
+  el.textContent = text;
+  el.style.cssText = 'position:fixed;top:80px;right:20px;background:#FF6B6B;color:white;padding:10px 20px;border-radius:50px;font-family:Fredoka One,cursive;font-size:18px;z-index:1000;animation:fadeUp 1.5s forwards;pointer-events:none;';
+  document.body.appendChild(el);
+  const style = document.createElement('style');
+  style.textContent = '@keyframes fadeUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-60px)}}';
+  document.head.appendChild(style);
+  setTimeout(() => el.remove(), 1500);
+}
+
+// Confetti
+function launchConfetti() {
+  const container = document.getElementById('confetti-container');
+  const colors = ['#FF6B6B','#4ECDC4','#FFE66D','#A78BFA','#6EE7B7','#FB923C','#F472B6'];
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left: ${Math.random() * 100}%;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      width: ${Math.random() * 10 + 6}px;
+      height: ${Math.random() * 10 + 6}px;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration: ${Math.random() * 2 + 1.5}s;
+      animation-delay: ${Math.random() * 0.5}s;
+    `;
+    container.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
+}
+
+// Flags
+function flagToISO(flag) {
+  if (!flag) return 'un';
+  try {
+    return [...flag].map(c => String.fromCharCode(c.codePointAt(0) - 127397)).join('').toLowerCase();
+  } catch(e) { return 'un'; }
+}
+
+function flagImg(flag, size = 32) {
+  const iso = flagToISO(flag);
+  const h = Math.round(size * 0.75);
+  return `<img src="https://flagcdn.com/${size}x${h}/${iso}.png" alt="${flag}" width="${size}" height="${h}" style="object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:6px;">`;
+}
+
+// Unsplash
+async function getPhoto(query, fallback = 'travel nature') {
+  try {
+    const res = await fetch(`https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=landscape&content_filter=high`, {
+      headers: { 'Authorization': `Client-ID ${UNSPLASH_KEY}` }
+    });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    return data.urls?.regular || '';
+  } catch(e) { return ''; }
+}
+
+// Progress
+function markRead(el) {
+  if (el.dataset.read) return;
+  el.dataset.read = '1';
+  sectionsRead = Math.min(sectionsRead + 1, 8);
+  document.getElementById('read-prog').style.width = (sectionsRead / 8 * 100) + '%';
+  document.getElementById('read-count').textContent = sectionsRead + ' / 8';
+  if (sectionsRead === 1) addScore(10);
+  if (sectionsRead === 8) { addScore(50); launchConfetti(); }
+}
+
+function h(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function infoTag(label, value) {
+  return `<span class="info-tag">${label} ${value}</span>`;
+}
+
+function culturalBox(label, value, sub) {
+  return `<div class="cultural-box"><div class="cultural-box-label">${label}</div><div class="cultural-box-value">${value}${sub ? '<br><span style="font-size:12px;color:#718096;">'+sub+'</span>' : ''}</div></div>`;
+}
+
+// Audience switcher
+let currentEditionDate = null;
+async function switchAudience(audience, btn) {
+  document.querySelectorAll('.audience-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentAudience = audience;
+  document.getElementById('content').style.opacity = '0.5';
+  await loadEditionForAudience(audience, currentEditionDate);
+  document.getElementById('content').style.opacity = '1';
+}
+
+async function loadEdition() {
+  const params = new URLSearchParams(window.location.search);
+  const audience = params.get('audience') || 'adulte';
+  currentAudience = audience;
+  document.querySelectorAll('.audience-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase().includes(audience === 'senior' ? 'sénior' : audience));
+  });
+  await loadEditionForAudience(audience, null);
+}
+
+async function loadEditionForAudience(audience, date) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const editionId = urlParams.get('id');
+  let data = null;
+  try {
+    if (date) {
+      const r1 = await fetch(`${SB_URL}/rest/v1/editions?date=eq.${encodeURIComponent(date)}&audience=eq.${audience}&select=*&limit=1`, {
+        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+      });
+      data = await r1.json();
+    }
+    if ((!data || !data.length) && editionId) {
+      const r2 = await fetch(`${SB_URL}/rest/v1/editions?id=eq.${editionId}&select=*`, {
+        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+      });
+      data = await r2.json();
+      if (data && data.length) currentEditionDate = data[0].date;
+    }
+    if (!data || !data.length) {
+      const r3 = await fetch(`${SB_URL}/rest/v1/editions?audience=eq.${audience}&select=*&order=created_at.desc&limit=1`, {
+        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+      });
+      data = await r3.json();
+    }
+    if (!data || !data.length) {
+      const r4 = await fetch(`${SB_URL}/rest/v1/editions?select=*&order=created_at.desc&limit=1`, {
+        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+      });
+      data = await r4.json();
+    }
+    if (!data || !data.length) {
+      document.getElementById('loading-state').innerHTML = '😕 Aucune édition disponible. <a href="archives.html">← Archives</a>';
+      return;
+    }
+  } catch(err) {
+    document.getElementById('loading-state').innerHTML = `❌ Erreur: ${err.message}`;
+    return;
+  }
+
+  const ed = data[0]; const c = ed.contenu;
+  if (!currentEditionDate) currentEditionDate = ed.date;
+  document.title = `Culti Kids · ${ed.date} · ${c.pays?.nom}`;
+
+  // Cover
+  const iso = flagToISO(c.pays?.flag);
+  document.getElementById('cover-flag-img').src = `https://flagcdn.com/64x48/${iso}.png`;
+  document.getElementById('cover-badge').textContent = ed.date;
+  document.getElementById('cover-title').textContent = `${c.pays?.nom} — ${c.pays?.titre}`;
+  document.getElementById('cover-date').textContent = ed.date;
+
+  // Photos Unsplash
+  const [photoPays, photoArt, photoVivant] = await Promise.all([
+    getPhoto((c.pays?.photo_search || c.pays?.nom || '') + ' landscape', 'travel'),
+    getPhoto('art painting museum', 'art'),
+    getPhoto((c.vivant?.animal || 'animal') + ' wildlife', 'animal nature'),
+  ]);
+
+  if (photoPays) document.getElementById('cover-img').src = photoPays;
+  else {
+    const grad = document.querySelector('.cover-gradient');
+    if (grad) grad.style.background = 'linear-gradient(135deg,#FF6B6B,#FFE66D)';
+  }
+
+  // PAYS
+  document.getElementById('s-pays').innerHTML = `
+    <div class="s-header">
+      <div class="s-emoji">🌍</div>
+      <div class="s-label">Le monde · ${h(c.pays?.nom)}</div>
+    </div>
+    <div class="s-body">
+      ${photoPays ? `<img src="${photoPays}" alt="${h(c.pays?.nom)}" class="s-img">` : ''}
+      <div class="s-title">${flagImg(c.pays?.flag, 28)} ${h(c.pays?.nom)} — ${h(c.pays?.titre)}</div>
+      <div class="s-text">${h(c.pays?.intro)}</div>
+      ${c.pays?.contexte ? `<div class="s-text" style="font-style:italic;opacity:0.8;">${h(c.pays.contexte)}</div>` : ''}
+      <div class="info-tags">
+        ${c.pays?.capitale ? infoTag('🏛️', h(c.pays.capitale)) : ''}
+        ${c.pays?.population ? infoTag('👥', h(c.pays.population)) : ''}
+        ${c.pays?.monnaie ? infoTag('💰', h(c.pays.monnaie)) : ''}
+        ${c.pays?.langue ? infoTag('🗣️', h(c.pays.langue)) : ''}
+        ${c.pays?.plat_national ? infoTag('🍽️', h(c.pays.plat_national)) : ''}
+        ${c.pays?.chef_etat ? infoTag('👑', h(c.pays.chef_etat)) : ''}
+      </div>
+      <div class="cultural-grid">
+        ${c.pays?.mot_local ? culturalBox('📝 Mot local', h(c.pays.mot_local)) : ''}
+        ${c.pays?.expression ? culturalBox('💬 Expression', h(c.pays.expression)) : ''}
+        ${c.pays?.ecrivain ? culturalBox('📚 Écrivain', h(c.pays.ecrivain), h(c.pays.livre || '')) : ''}
+        ${c.pays?.poeme ? culturalBox('✍️ Poème', h(c.pays.poeme)) : ''}
+      </div>
+      ${c.pays?.actualite ? `<div style="background:rgba(255,255,255,0.7);border-radius:14px;padding:10px 14px;margin-top:8px;font-size:13px;font-weight:800;color:#1D4ED8;">📰 ${h(c.pays.actualite)}</div>` : ''}
+      <div class="stat-pill"><span class="stat-num">${h(c.pays?.chiffre)}</span><span class="stat-txt">${h(c.pays?.chiffre_label)}</span></div>
+      <div class="lecon">${h(c.pays?.lecon)}</div>
+    </div>`;
+
+  // PERSONNALITÉ
+  document.getElementById('s-perso').innerHTML = `
+    <div class="s-header">
+      <div class="s-emoji">👤</div>
+      <div class="s-label">Destin extraordinaire</div>
+    </div>
+    <div class="s-body">
+      <div class="s-title">${h(c.personnalite?.nom)}</div>
+      <div class="s-text" style="font-size:13px;opacity:0.7;">${h(c.personnalite?.epoque)} · ${h(c.personnalite?.titre)}</div>
+      <div class="s-text">${h(c.personnalite?.histoire)}</div>
+      ${c.personnalite?.impact ? `<div class="s-text">${h(c.personnalite.impact)}</div>` : ''}
+      <div class="lecon">${h(c.personnalite?.lecon)}</div>
+    </div>`;
+
+  // ART
+  document.getElementById('s-art').innerHTML = `
+    <div class="s-header">
+      <div class="s-emoji">🎨</div>
+      <div class="s-label">Art · ${h(c.art?.artiste)}</div>
+    </div>
+    <div class="s-body">
+      ${photoArt ? `<img src="${photoArt}" alt="Art" class="s-img">` : ''}
+      <div class="s-title">${h(c.art?.oeuvre)} <span style="font-size:15px;opacity:0.6;">(${h(c.art?.annee)})</span></div>
+      <div class="s-text">${h(c.art?.description)}</div>
+      ${c.art?.contexte ? `<div class="s-text" style="font-style:italic;opacity:0.8;">${h(c.art.contexte)}</div>` : ''}
+      <div class="defi">${h(c.art?.defi)}</div>
+    </div>`;
+
+  // MUSIQUE
+  const ytUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(c.musique?.youtube_search||'')}`;
+  document.getElementById('s-musique').innerHTML = `
+    <div class="s-header">
+      <div class="s-emoji">🎵</div>
+      <div class="s-label">Musique · ${h(c.musique?.artiste)}</div>
+    </div>
+    <div class="s-body">
+      <div class="s-title">${h(c.musique?.titre)} <span style="font-size:15px;opacity:0.6;">(${h(c.musique?.annee)})</span></div>
+      <div class="s-text">${h(c.musique?.anecdote)}</div>
+      ${c.musique?.pourquoi_ecouter ? `<div class="s-text" style="font-style:italic;">${h(c.musique.pourquoi_ecouter)}</div>` : ''}
+      <div class="lecon">${h(c.musique?.lecon)}</div>
+      <a class="yt-btn" href="${ytUrl}" target="_blank">▶ Écouter sur YouTube</a>
+    </div>`;
+
+  // IDÉE
+  document.getElementById('s-idee').innerHTML = `
+    <div class="s-header">
+      <div class="s-emoji">🧠</div>
+      <div class="s-label">Idée du jour · ${h(c.idee?.langue)}</div>
+    </div>
+    <div class="s-body">
+      <div class="s-title">${h(c.idee?.mot)}</div>
+      <div class="s-text">${h(c.idee?.definition)}</div>
+      <div class="s-text" style="color:var(--teal);">${h(c.idee?.pourquoi)}</div>
+    </div>`;
+
+  // VIVANT
+  document.getElementById('s-vivant').innerHTML = `
+    <div class="s-header">
+      <div class="s-emoji">🦁</div>
+      <div class="s-label">Le vivant · ${h(c.vivant?.animal)}</div>
+    </div>
+    <div class="s-body">
+      ${photoVivant ? `<img src="${photoVivant}" alt="${h(c.vivant?.animal)}" class="s-img">` : ''}
+      <div class="s-title">${h(c.vivant?.animal)}</div>
+      <div class="s-text">${h(c.vivant?.fait1)}</div>
+      <div class="s-text">${h(c.vivant?.fait2)}</div>
+      <div class="lecon">${h(c.vivant?.lecon)}</div>
+    </div>`;
+
+  // CITATION
+  document.getElementById('s-citation').innerHTML = `
+    <div style="font-size:40px;margin-bottom:8px;">"</div>
+    <div class="citation-q">${h(c.citation?.texte)}</div>
+    <div class="citation-author">— ${h(c.citation?.auteur)}</div>
+    <div class="citation-modern">${h(c.citation?.traduction)}</div>`;
+
+  // ÉNIGME
+  document.getElementById('s-enigme').innerHTML = `
+    <div class="enigme-emoji">🧩</div>
+    <div class="enigme-q">${h(c.enigme?.question)}</div>
+    <button class="enigme-btn" onclick="revealEnigme(this, '${h(c.enigme?.reponse).replace(/'/g,"\\'")}')">Voir la réponse !</button>
+    <div class="enigme-rep" id="enigme-rep"></div>`;
+
+  // QUIZ
+  quizData = c.quiz || [];
+  cur = 0; correct = 0;
+  renderQ();
+
+  // Observer
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) markRead(e.target); });
+  }, { threshold: 0.4 });
+  ['s-pays','s-perso','s-art','s-musique','s-idee','s-vivant','s-citation','s-enigme'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) obs.observe(el);
+  });
+
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+  document.getElementById('content').style.opacity = '1';
+}
+
+function renderQ() {
+  if (!quizData.length) return;
+  const q = quizData[cur];
+  const pct = (cur / quizData.length) * 100;
+  document.getElementById('quiz-prog').style.width = pct + '%';
+  document.getElementById('q-num').textContent = `Question ${cur + 1} sur ${quizData.length}`;
+  document.getElementById('q-text').textContent = q.question;
+  document.getElementById('q-feedback').style.display = 'none';
+  document.getElementById('q-next').style.display = 'none';
+  answered = false;
+  document.getElementById('q-opts').innerHTML = q.options.map((o, i) =>
+    `<button class="q-opt" onclick="answer(${i})">${o}</button>`
+  ).join('');
+  document.getElementById('q-score').textContent = `⭐ ${correct} / ${quizData.length}`;
+}
+
+function answer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[cur];
+  document.querySelectorAll('.q-opt').forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.correct) b.classList.add('correct');
+    else if (i === idx && idx !== q.correct) b.classList.add('wrong');
+  });
+  if (idx === q.correct) {
+    correct++;
+    addScore(20);
+    launchConfetti();
+  }
+  document.getElementById('q-score').textContent = `⭐ ${correct} / ${quizData.length}`;
+  const fb = document.getElementById('q-feedback');
+  fb.textContent = idx === q.correct ? '🎉 Bonne réponse !' : `❌ La bonne réponse était : ${q.options[q.correct]}`;
+  fb.style.display = 'block';
+  document.getElementById('q-next').style.display = 'block';
+}
+
+function nextQ() {
+  cur++;
+  if (cur < quizData.length) { renderQ(); }
+  else {
+    document.getElementById('quiz-prog').style.width = '100%';
+    document.getElementById('quiz-display').style.display = 'none';
+    const res = document.getElementById('quiz-result');
+    res.style.display = 'block';
+    const emojis = ['😅','😕','🙂','👍','🌟','🏆'];
+    document.getElementById('res-emoji').textContent = emojis[correct] || '🎉';
+    document.getElementById('res-score').textContent = `${correct} / ${quizData.length}`;
+    const labels = ['Continue !','Pas mal !','Bien !','Très bien !','Excellent !','Parfait ! 🏆'];
+    document.getElementById('res-label').textContent = labels[correct] || 'Bravo !';
+    document.getElementById('res-badges').innerHTML = [
+      { label: '📖 Édition lue', pts: 50, ok: true },
+      { label: '🧠 Quiz maîtrisé', pts: correct * 20, ok: correct >= 4 },
+      { label: '🏆 Score parfait', pts: 20, ok: correct === quizData.length }
+    ].map(b => `<div class="badge ${b.ok?'earned':''}">${b.ok?'⭐':'○'} ${b.label}</div>`).join('');
+    if (correct === quizData.length) { launchConfetti(); addScore(20); }
+  }
+}
+
+function revealEnigme(btn, rep) {
+  document.getElementById('enigme-rep').textContent = '✅ ' + rep;
+  document.getElementById('enigme-rep').style.display = 'block';
+  btn.style.display = 'none';
+  addScore(5);
+}
+
+loadEdition();
+</script>
+</body>
+</html>
