@@ -3,182 +3,170 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Archives — Culti</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<title>Culti — Archives</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root { --ink: #0D1B2A; --jade: #1D9E75; --jade-light: #9FE1CB; --jade-dark: #0F6E56; --sand: #F0ECE0; --sand-dark: #DDD8CC; --slate: #4A5568; --slate-light: #718096; --white: #FFFFFF; --off-white: #F8F7F4; }
-body { font-family: 'Nunito', sans-serif; color: var(--ink); background: #FFF8F0; }
-nav { background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); padding: 1.25rem 3rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-.nav-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--sand); text-decoration: none; }
-.nav-logo span { color: var(--jade); }
-.nav-back { font-size: 13px; color: #718096; text-decoration: none; }
-.nav-back:hover { color: var(--jade-light); }
-.hero { background: #FFF8F0; padding: 4rem 2rem 3rem; text-align: center; border-bottom: 2px solid #FFE5D0; }
-.hero-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--jade); margin-bottom: 1rem; }
-.hero-title { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: clamp(32px, 5vw, 52px); color: #1A1A2E; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
-.hero-sub { font-size: 15px; color: #718096; }
-.main { max-width: 960px; margin: 0 auto; padding: 3rem 2rem; }
-.filters { display: flex; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap; }
-.filter-btn { font-size: 13px; padding: 6px 16px; border-radius: 20px; border: 1px solid var(--sand-dark); background: var(--white); color: var(--slate); cursor: pointer; transition: all 0.15s; font-family: 'Nunito', sans-serif; }
-.filter-btn:hover, .filter-btn.active { background: #FF6B6B; color: white; border-color: #FF6B6B; }
-.search-row { margin-bottom: 2rem; }
-.search-input { width: 100%; padding: 0.75rem 1.25rem; border: 1.5px solid var(--sand-dark); border-radius: 8px; font-size: 15px; font-family: 'Nunito', sans-serif; background: var(--white); color: var(--ink); outline: none; transition: border-color 0.2s; }
-.search-input:focus { border-color: var(--jade); }
-.editions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
-.edition-card { background: var(--white); border: 1px solid var(--sand-dark); border-radius: 12px; padding: 1.5rem; cursor: pointer; transition: border-color 0.2s, transform 0.15s; text-decoration: none; display: block; color: inherit; }
-.edition-card:hover { border-color: var(--jade); transform: translateY(-2px); }
-.card-date { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate-light); margin-bottom: 0.75rem; }
-.card-flag { display: none; }
-.card-pays { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 20px; color: #1A1A2E; margin-bottom: 6px; letter-spacing: -0.01em; }
-.card-perso { font-size: 13px; color: var(--slate-light); margin-bottom: 0.75rem; }
-.card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.card-tag { font-size: 11px; background: #FFF8F0; border: 1px solid var(--sand-dark); border-radius: 20px; padding: 3px 10px; color: var(--slate); }
-.empty { text-align: center; padding: 4rem 2rem; color: var(--slate-light); }
-.empty-icon { font-size: 40px; margin-bottom: 1rem; }
-.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
-.stat { background: var(--white); border: 1px solid var(--sand-dark); border-radius: 8px; padding: 1rem; text-align: center; }
-.stat-num { font-family: 'Nunito', sans-serif; font-size: 28px; font-weight: 900; color: #FF6B6B; }
-.stat-label { font-size: 12px; color: #718096; margin-top: 4px; }
-.loading { text-align: center; padding: 3rem; color: var(--slate-light); font-size: 14px; }
-@media (max-width: 640px) { nav { padding: 1rem 1.5rem; } .main { padding: 2rem 1rem; } }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--coral:#FF6B6B;--teal:#4ECDC4;--yellow:#FFE66D;--purple:#A78BFA;--green:#6EE7B7;--orange:#FB923C}
+body{font-family:'Nunito',sans-serif;background:#0F1923;color:white;min-height:100vh;overflow-x:hidden}
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.star{position:absolute;background:white;border-radius:50%;animation:twinkle linear infinite}
+@keyframes twinkle{0%,100%{opacity:0.15}50%{opacity:0.8}}
+nav{position:sticky;top:0;z-index:100;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(15,25,35,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-mark{width:36px;height:36px;background:linear-gradient(135deg,var(--coral),var(--orange));border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:18px;color:white}
+.nav-name{font-family:'Fredoka One',cursive;font-size:18px;color:white}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-btn{font-size:13px;font-weight:800;color:rgba(255,255,255,0.5);text-decoration:none}
+.nav-btn:hover{color:white}
+.nav-cta{background:var(--coral);color:white;padding:7px 18px;border-radius:50px;font-size:13px;font-weight:900;text-decoration:none}
+
+.hero{padding:5rem 2rem 3rem;text-align:center;position:relative;z-index:1}
+.hero-label{font-size:12px;font-weight:900;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem}
+.hero-title{font-family:'Fredoka One',cursive;font-size:clamp(32px,5vw,52px);color:white;margin-bottom:0.75rem}
+.hero-sub{font-size:15px;color:rgba(255,255,255,0.5);font-weight:700}
+
+.main{max-width:1000px;margin:0 auto;padding:2rem 1.5rem 5rem;position:relative;z-index:1}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:1.25rem;text-align:center}
+.stat-num{font-family:'Fredoka One',cursive;font-size:28px;color:var(--coral)}
+.stat-label{font-size:12px;color:rgba(255,255,255,0.5);font-weight:700;margin-top:4px}
+
+/* SEARCH & FILTERS */
+.search-row{margin-bottom:1.25rem}
+.search-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:0.875rem 1.25rem;font-size:15px;color:white;font-family:'Nunito',sans-serif;outline:none;transition:border-color 0.2s}
+.search-input::placeholder{color:rgba(255,255,255,0.3)}
+.search-input:focus{border-color:var(--teal)}
+.filters{display:flex;gap:8px;margin-bottom:2rem;flex-wrap:wrap}
+.filter-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:50px;padding:6px 16px;font-size:13px;font-weight:800;cursor:pointer;color:rgba(255,255,255,0.6);font-family:'Nunito',sans-serif;transition:all 0.15s}
+.filter-btn:hover,.filter-btn.active{background:var(--coral);border-color:var(--coral);color:white}
+
+/* GRID */
+.editions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem}
+.ed-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:1.5rem;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;color:inherit;position:relative;overflow:hidden}
+.ed-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--coral),var(--orange));opacity:0;transition:opacity 0.2s}
+.ed-card:hover{background:rgba(255,255,255,0.07);transform:translateY(-3px);border-color:rgba(255,255,255,0.15)}
+.ed-card:hover::before{opacity:1}
+.ed-date{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.75rem;font-weight:700}
+.ed-flag{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ed-flag img{width:32px;height:24px;object-fit:cover;border-radius:4px}
+.ed-pays{font-family:'Fredoka One',cursive;font-size:18px;color:white}
+.ed-perso{font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:0.75rem;font-weight:700}
+.ed-tags{display:flex;gap:6px;flex-wrap:wrap}
+.ed-tag{font-size:11px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:3px 10px;color:rgba(255,255,255,0.5);font-weight:700}
+
+.empty{text-align:center;padding:4rem 2rem;color:rgba(255,255,255,0.3)}
+.empty-emoji{font-size:48px;margin-bottom:1rem;display:block}
+.loading{text-align:center;padding:3rem;color:rgba(255,255,255,0.4);font-size:14px;font-weight:700}
+
+@media(max-width:640px){nav{padding:0.75rem 1rem}.main{padding:1.5rem 1rem}}
 </style>
 </head>
 <body>
+<div class="stars" id="stars"></div>
 
 <nav>
-  <a href="/" style="text-decoration:none;display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:10px;background:#FF6B6B;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:white;flex-shrink:0;">C</div><span style="font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:#1A1A2E;letter-spacing:-0.02em;">culti</span></a>
-  <a href="/" class="nav-back">← Retour au site</a>
+  <a href="/" class="nav-logo"><div class="nav-mark">C</div><div class="nav-name">culti</div></a>
+  <div class="nav-right">
+    <a href="edition.html" class="nav-btn">Mission du jour</a>
+    <a href="profil.html" class="nav-cta">Mon profil →</a>
+  </div>
 </nav>
 
 <div class="hero">
-  <div class="hero-label">Toutes les éditions</div>
+  <div class="hero-label">📚 Toutes les missions</div>
   <h1 class="hero-title">Archives</h1>
-  <p class="hero-sub">Retrouvez chaque édition publiée depuis le début de Culti.</p>
+  <p class="hero-sub">Retrouve toutes les éditions publiées depuis le début de Culti.</p>
 </div>
 
-<main class="main">
+<div class="main">
   <div class="stats-row">
-    <div class="stat"><div class="stat-num" id="stat-total">—</div><div class="stat-label">éditions publiées</div></div>
-    <div class="stat"><div class="stat-num" id="stat-pays">—</div><div class="stat-label">pays explorés</div></div>
-    <div class="stat"><div class="stat-num" id="stat-perso">—</div><div class="stat-label">personnalités</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-total">—</div><div class="stat-label">éditions publiées</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-pays">—</div><div class="stat-label">pays explorés</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-perso">—</div><div class="stat-label">personnalités</div></div>
   </div>
 
   <div class="search-row">
-    <input type="text" class="search-input" id="search" placeholder="Rechercher un pays, une personnalité...">
+    <input type="text" class="search-input" id="search" placeholder="🔍 Rechercher un pays, une personnalité...">
   </div>
 
-  <div class="filters" id="filters">
-    <button class="filter-btn active" onclick="setFilter('all', this)">Toutes</button>
-    <button class="filter-btn" onclick="setFilter('week', this)">Cette semaine</button>
-    <button class="filter-btn" onclick="setFilter('month', this)">Ce mois</button>
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all',this)">Toutes</button>
+    <button class="filter-btn" onclick="setFilter('week',this)">Cette semaine</button>
+    <button class="filter-btn" onclick="setFilter('month',this)">Ce mois</button>
   </div>
 
-  <div id="loading" class="loading">Chargement des éditions...</div>
-  <div class="editions-grid" id="grid" style="display:none;"></div>
-  <div class="empty" id="empty" style="display:none;">
-    <div class="empty-icon">📭</div>
-    <div>Aucune édition trouvée.</div>
-  </div>
-</main>
+  <div class="loading" id="loading">Chargement des missions...</div>
+  <div class="editions-grid" id="grid" style="display:none"></div>
+  <div class="empty" id="empty" style="display:none"><span class="empty-emoji">📭</span>Aucune édition trouvée.</div>
+</div>
 
 <script>
-const SUPABASE_URL = 'https://zuahstlswkprzdmflekg.supabase.co';
+const SB_URL='https://zuahstlswkprzdmflekg.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1YWhzdGxzd2twcnpkbWZsZWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDU2MjMsImV4cCI6MjA5NzAyMTYyM30.-F0WRbiprAa-Zt1ih1QdsQzuuqVW2froK6Ddfvrqoik';
 
-// Convertir emoji drapeau en code ISO 2 lettres pour flagcdn.com
-function flagToISO(flag) {
-  if (!flag) return 'un';
-  try {
-    const codePoints = [...flag].map(c => c.codePointAt(0));
-    return codePoints.map(cp => String.fromCharCode(cp - 127397)).join('').toLowerCase();
-  } catch(e) { return 'un'; }
+(function(){const c=document.getElementById('stars');for(let i=0;i<100;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*2+0.5;s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${Math.random()*4+2}s;animation-delay:${Math.random()*4}s;`;c.appendChild(s);}})();
+
+function flagToISO(f){if(!f)return'un';try{return[...f].map(c=>String.fromCharCode(c.codePointAt(0)-127397)).join('').toLowerCase();}catch(e){return'un';}}
+
+let all=[], currentFilter='all';
+
+async function load(){
+  const r=await fetch(`${SB_URL}/rest/v1/editions?select=*&audience=eq.adulte&order=created_at.desc`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}});
+  all=await r.json();
+  document.getElementById('loading').style.display='none';
+  document.getElementById('grid').style.display='grid';
+  // Stats
+  document.getElementById('stat-total').textContent=all.length;
+  document.getElementById('stat-pays').textContent=new Set(all.map(e=>e.pays_nom).filter(Boolean)).size;
+  document.getElementById('stat-perso').textContent=new Set(all.map(e=>e.personnalite_nom).filter(Boolean)).size;
+  render(all);
 }
 
-function flagImg(flag, size = 32) {
-  const iso = flagToISO(flag);
-  return `<img src="https://flagcdn.com/${size}x${Math.round(size*0.75)}/${iso}.png" 
-    alt="${flag}" 
-    style="width:${size}px;height:${Math.round(size*0.75)}px;object-fit:cover;border-radius:3px;vertical-align:middle;margin-right:8px;"
-    onerror="this.style.display='none'">`;
-}
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1YWhzdGxzd2twcnpkbWZsZWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDU2MjMsImV4cCI6MjA5NzAyMTYyM30.-F0WRbiprAa-Zt1ih1QdsQzuuqVW2froK6Ddfvrqoik';
-
-let allEditions = [];
-let currentFilter = 'all';
-
-async function loadEditions() {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/editions?select=*&audience=eq.adulte&order=created_at.desc`, {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-    });
-    allEditions = await res.json();
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('grid').style.display = 'grid';
-    updateStats();
-    renderEditions(allEditions);
-  } catch(e) {
-    document.getElementById('loading').textContent = 'Erreur de chargement.';
-  }
-}
-
-function updateStats() {
-  document.getElementById('stat-total').textContent = allEditions.length;
-  const pays = new Set(allEditions.map(e => e.pays_nom).filter(Boolean));
-  document.getElementById('stat-pays').textContent = pays.size;
-  const persos = new Set(allEditions.map(e => e.personnalite_nom).filter(Boolean));
-  document.getElementById('stat-perso').textContent = persos.size;
-}
-
-function renderEditions(editions) {
-  const grid = document.getElementById('grid');
-  const empty = document.getElementById('empty');
-  if (!editions.length) { grid.style.display = 'none'; empty.style.display = 'block'; return; }
-  empty.style.display = 'none'; grid.style.display = 'grid';
-  grid.innerHTML = editions.map(e => {
-    const c = e.contenu || {};
-    const art = c.art?.oeuvre || '';
-    const idee = c.idee?.mot || '';
-    return `<a class="edition-card" href="/edition.html?id=${e.id}">
-      <div class="card-date">${e.date || ''}</div>
-      <div class="card-pays">${flagImg(e.pays_flag, 28)}${e.pays_nom || 'Édition'}</div>
-      <div class="card-perso">${e.personnalite_nom || ''}</div>
-      <div class="card-tags">
-        ${art ? `<span class="card-tag">🎨 ${art}</span>` : ''}
-        ${idee ? `<span class="card-tag">🧠 ${idee}</span>` : ''}
+function render(eds){
+  const g=document.getElementById('grid'),e=document.getElementById('empty');
+  if(!eds.length){g.style.display='none';e.style.display='block';return;}
+  e.style.display='none';g.style.display='grid';
+  g.innerHTML=eds.map(ed=>{
+    const c=ed.contenu||{};
+    const iso=flagToISO(ed.pays_flag);
+    return `<a class="ed-card" href="edition.html?id=${ed.id}">
+      <div class="ed-date">${ed.date||''}</div>
+      <div class="ed-flag"><img src="https://flagcdn.com/32x24/${iso}.png" alt="${ed.pays_nom||''}" width="32" height="24"><div class="ed-pays">${ed.pays_nom||'Édition'}</div></div>
+      <div class="ed-perso">${ed.personnalite_nom||''}</div>
+      <div class="ed-tags">
+        ${c.art?.oeuvre?`<span class="ed-tag">🎨 ${c.art.oeuvre}</span>`:''}
+        ${c.idee?.mot?`<span class="ed-tag">🧠 ${c.idee.mot}</span>`:''}
       </div>
     </a>`;
   }).join('');
 }
 
-function setFilter(filter, btn) {
-  currentFilter = filter;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+function setFilter(f,btn){
+  currentFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   applyFilters();
 }
 
-function applyFilters() {
-  const q = document.getElementById('search').value.toLowerCase();
-  const now = new Date();
-  let filtered = allEditions.filter(e => {
-    const text = `${e.pays_nom} ${e.personnalite_nom} ${e.date}`.toLowerCase();
-    if (q && !text.includes(q)) return false;
-    if (currentFilter === 'week') {
-      const d = new Date(e.created_at);
-      return (now - d) < 7 * 24 * 60 * 60 * 1000;
-    }
-    if (currentFilter === 'month') {
-      const d = new Date(e.created_at);
-      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-    }
+function applyFilters(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const now=new Date();
+  const filtered=all.filter(e=>{
+    const txt=`${e.pays_nom} ${e.personnalite_nom} ${e.date}`.toLowerCase();
+    if(q&&!txt.includes(q))return false;
+    if(currentFilter==='week'){const d=new Date(e.created_at);return(now-d)<7*24*3600*1000;}
+    if(currentFilter==='month'){const d=new Date(e.created_at);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}
     return true;
   });
-  renderEditions(filtered);
+  render(filtered);
 }
 
-document.getElementById('search').addEventListener('input', applyFilters);
-loadEditions();
+document.getElementById('search').addEventListener('input',applyFilters);
+load();
 </script>
 </body>
 </html>

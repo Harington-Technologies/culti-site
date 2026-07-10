@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Culti — Deviens un Gardien</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--coral:#FF6B6B;--teal:#4ECDC4;--yellow:#FFE66D;--purple:#A78BFA;--green:#6EE7B7;--orange:#FB923C;--ink:#0F1923}
+body{font-family:'Nunito',sans-serif;background:#0F1923;color:white;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;overflow-x:hidden}
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;background:white;border-radius:50%;animation:twinkle linear infinite}
+@keyframes twinkle{0%,100%{opacity:0.2}50%{opacity:1}}
+
+/* LOGO */
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:3rem;position:relative;z-index:1}
+.logo-mark{width:44px;height:44px;background:linear-gradient(135deg,var(--coral),var(--orange));border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:24px;color:white}
+.logo-name{font-family:'Fredoka One',cursive;font-size:24px;color:white}
+
+/* CARD */
+.card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:32px;padding:2.5rem;width:100%;max-width:480px;position:relative;z-index:1}
+
+/* STEPS */
+.steps{display:flex;align-items:center;gap:8px;margin-bottom:2rem;justify-content:center}
+.step{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;border:2px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.4);transition:all 0.3s}
+.step.active{background:var(--coral);border-color:var(--coral);color:white}
+.step.done{background:var(--teal);border-color:var(--teal);color:var(--ink)}
+.step-line{flex:1;height:2px;background:rgba(255,255,255,0.1);border-radius:2px}
+.step-line.done{background:var(--teal)}
+
+/* PANELS */
+.panel{display:none}
+.panel.active{display:block}
+.panel-title{font-family:'Fredoka One',cursive;font-size:26px;color:white;margin-bottom:8px;line-height:1.2}
+.panel-sub{font-size:15px;color:rgba(255,255,255,0.55);margin-bottom:2rem;font-weight:600;line-height:1.6}
+
+/* FORM */
+.form-group{margin-bottom:1.25rem}
+.form-label{font-size:13px;font-weight:800;color:rgba(255,255,255,0.7);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:0.05em}
+.form-input{width:100%;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);border-radius:14px;padding:0.875rem 1.25rem;font-size:15px;color:white;font-family:'Nunito',sans-serif;outline:none;transition:border-color 0.2s}
+.form-input::placeholder{color:rgba(255,255,255,0.3)}
+.form-input:focus{border-color:var(--teal)}
+.form-error{font-size:12px;color:var(--coral);font-weight:800;margin-top:4px;display:none}
+
+/* GARDIENS */
+.gardiens-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:2rem}
+.g-option{background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.1);border-radius:20px;padding:1.25rem 1rem;text-align:center;cursor:pointer;transition:all 0.2s}
+.g-option:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2);transform:translateY(-2px)}
+.g-option.selected{border-color:var(--g-color,var(--teal));background:var(--g-bg,rgba(78,205,196,0.1))}
+.g-emoji{font-size:36px;margin-bottom:8px;display:block}
+.g-name{font-family:'Fredoka One',cursive;font-size:16px;color:white;margin-bottom:4px}
+.g-desc{font-size:12px;color:rgba(255,255,255,0.5);font-weight:600;line-height:1.4}
+
+/* BTN */
+.btn-primary{width:100%;background:linear-gradient(135deg,var(--coral),var(--orange));color:white;border:none;padding:1rem;border-radius:50px;font-size:16px;font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 6px 20px rgba(255,107,107,0.35);transition:transform 0.1s;margin-top:0.5rem}
+.btn-primary:hover{transform:scale(1.02)}
+.btn-primary:active{transform:scale(0.98)}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;gap:12px;margin:1.25rem 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.1)}
+.divider span{font-size:13px;color:rgba(255,255,255,0.3);font-weight:700}
+
+/* LINK */
+.link{color:var(--teal);text-decoration:none;font-weight:800}
+.link:hover{text-decoration:underline}
+.center-text{text-align:center;font-size:14px;color:rgba(255,255,255,0.5);margin-top:1.5rem;font-weight:700}
+
+/* SUCCESS */
+.success-icon{font-size:72px;margin-bottom:1rem;display:block;animation:bounce 0.6s ease infinite alternate;text-align:center}
+@keyframes bounce{0%{transform:translateY(0)}100%{transform:translateY(-12px)}}
+.success-title{font-family:'Fredoka One',cursive;font-size:28px;color:white;margin-bottom:1rem;text-align:center}
+.success-sub{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;text-align:center;font-weight:600;margin-bottom:2rem}
+.gardien-preview{border-radius:20px;padding:1.5rem;text-align:center;margin-bottom:1.5rem}
+.gardien-preview-emoji{font-size:56px;margin-bottom:8px;display:block}
+.gardien-preview-name{font-family:'Fredoka One',cursive;font-size:22px;color:white}
+.gardien-preview-level{font-size:13px;color:rgba(255,255,255,0.6);font-weight:700;margin-top:4px}
+
+/* STATUS */
+.status-msg{font-size:14px;font-weight:800;text-align:center;padding:10px;border-radius:10px;margin-top:12px;display:none}
+.status-msg.error{background:rgba(255,107,107,0.15);color:var(--coral);display:block}
+.status-msg.success{background:rgba(78,205,196,0.15);color:var(--teal);display:block}
+
+@media(max-width:480px){.gardiens-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<div class="logo">
+  <div class="logo-mark">C</div>
+  <div class="logo-name">culti</div>
+</div>
+
+<div class="card">
+  <!-- STEPS -->
+  <div class="steps">
+    <div class="step active" id="step-1">1</div>
+    <div class="step-line" id="line-1"></div>
+    <div class="step" id="step-2">2</div>
+    <div class="step-line" id="line-2"></div>
+    <div class="step" id="step-3">✓</div>
+  </div>
+
+  <!-- PANEL 1 : COMPTE -->
+  <div class="panel active" id="panel-1">
+    <div class="panel-title">Crée ton compte Gardien 🛡️</div>
+    <div class="panel-sub">Rejoins des milliers d'explorateurs qui grandissent chaque matin.</div>
+    <div class="form-group">
+      <label class="form-label">Ton prénom</label>
+      <input type="text" class="form-input" id="pseudo" placeholder="Ex: Lucas, Emma...">
+      <div class="form-error" id="err-pseudo">Entre ton prénom !</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-input" id="email" placeholder="ton@email.com">
+      <div class="form-error" id="err-email">Entre un email valide !</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Mot de passe</label>
+      <input type="password" class="form-input" id="password" placeholder="8 caractères minimum">
+      <div class="form-error" id="err-password">8 caractères minimum !</div>
+    </div>
+    <div class="status-msg" id="status-1"></div>
+    <button class="btn-primary" onclick="goStep2()" id="btn-step1">Continuer →</button>
+    <div class="center-text">Déjà un compte ? <a href="login.html" class="link">Se connecter</a></div>
+  </div>
+
+  <!-- PANEL 2 : GARDIEN -->
+  <div class="panel" id="panel-2">
+    <div class="panel-title">Qui es-tu ? 🌍</div>
+    <div class="panel-sub">Choisis ton type de Gardien. Tu pourras explorer tous les domaines, mais c'est ton identité.</div>
+    <div class="gardiens-grid">
+      <div class="g-option" data-type="explorateur" style="--g-color:var(--teal);--g-bg:rgba(78,205,196,0.12)" onclick="selectGardien(this)">
+        <span class="g-emoji">🌍</span>
+        <div class="g-name">Explorateur</div>
+        <div class="g-desc">Pays, cultures, histoire</div>
+      </div>
+      <div class="g-option" data-type="gardien" style="--g-color:var(--green);--g-bg:rgba(110,231,183,0.12)" onclick="selectGardien(this)">
+        <span class="g-emoji">🌱</span>
+        <div class="g-name">Gardien</div>
+        <div class="g-desc">Nature, écologie, animaux</div>
+      </div>
+      <div class="g-option" data-type="artiste" style="--g-color:var(--purple);--g-bg:rgba(167,139,250,0.12)" onclick="selectGardien(this)">
+        <span class="g-emoji">🎨</span>
+        <div class="g-name">Artiste</div>
+        <div class="g-desc">Art, musique, cinéma</div>
+      </div>
+      <div class="g-option" data-type="scientifique" style="--g-color:var(--orange);--g-bg:rgba(251,146,60,0.12)" onclick="selectGardien(this)">
+        <span class="g-emoji">🚀</span>
+        <div class="g-name">Scientifique</div>
+        <div class="g-desc">Sciences, astro, IA</div>
+      </div>
+    </div>
+    <div class="status-msg" id="status-2"></div>
+    <button class="btn-primary" onclick="createAccount()" id="btn-step2">Devenir Gardien ! 🛡️</button>
+  </div>
+
+  <!-- PANEL 3 : SUCCÈS -->
+  <div class="panel" id="panel-3">
+    <span class="success-icon">🎉</span>
+    <div class="success-title">Bienvenue, <span id="success-name">Gardien</span> !</div>
+    <div class="gardien-preview" id="gardien-preview">
+      <span class="gardien-preview-emoji" id="preview-emoji">🌍</span>
+      <div class="gardien-preview-name" id="preview-name">L'Explorateur</div>
+      <div class="gardien-preview-level">Niveau 1 · 0 XP · Gardien de la Terre</div>
+    </div>
+    <div class="success-sub">Ta mission commence maintenant. Chaque matin à 7h, une nouvelle aventure t'attend dans ta boîte mail.</div>
+    <button class="btn-primary" onclick="window.location.href='edition.html'">📖 Lire l'édition du jour →</button>
+  </div>
+</div>
+
+<script>
+const SB_URL = 'https://zuahstlswkprzdmflekg.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1YWhzdGxzd2twcnpkbWZsZWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NDU2MjMsImV4cCI6MjA5NzAyMTYyM30.-F0WRbiprAa-Zt1ih1QdsQzuuqVW2froK6Ddfvrqoik';
+const { createClient } = supabase;
+const sb = createClient(SB_URL, SB_KEY);
+
+let selectedGardien = null;
+let step1Data = {};
+
+// Étoiles
+(function(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<80;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*2+0.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${Math.random()*4+2}s;animation-delay:${Math.random()*4}s;`;
+    c.appendChild(s);
+  }
+})();
+
+// Vérifier si déjà connecté
+sb.auth.getSession().then(({data:{session}})=>{
+  if(session) window.location.href='profil.html';
+});
+
+function selectGardien(el) {
+  document.querySelectorAll('.g-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedGardien = el.dataset.type;
+}
+
+function showError(id, show) {
+  document.getElementById(id).style.display = show ? 'block' : 'none';
+}
+
+function goStep2() {
+  const pseudo = document.getElementById('pseudo').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  let ok = true;
+  showError('err-pseudo', !pseudo); if(!pseudo) ok=false;
+  showError('err-email', !email||!email.includes('@')); if(!email||!email.includes('@')) ok=false;
+  showError('err-password', password.length<8); if(password.length<8) ok=false;
+  if(!ok) return;
+  step1Data = {pseudo, email, password};
+  // Passer à l'étape 2
+  document.getElementById('panel-1').classList.remove('active');
+  document.getElementById('panel-2').classList.add('active');
+  document.getElementById('step-1').className='step done';
+  document.getElementById('step-1').textContent='✓';
+  document.getElementById('line-1').classList.add('done');
+  document.getElementById('step-2').className='step active';
+}
+
+async function createAccount() {
+  if(!selectedGardien) {
+    const s=document.getElementById('status-2');
+    s.textContent='Choisis ton type de Gardien !';
+    s.className='status-msg error';
+    return;
+  }
+  const btn = document.getElementById('btn-step2');
+  btn.disabled=true; btn.textContent='Création en cours...';
+
+  try {
+    // Créer le compte Supabase Auth
+    const {data, error} = await sb.auth.signUp({
+      email: step1Data.email,
+      password: step1Data.password,
+      options: { data: { pseudo: step1Data.pseudo } }
+    });
+    if(error) throw error;
+
+    const userId = data.user?.id;
+    if(userId) {
+      // Créer le profil
+      await sb.from('profiles').insert({
+        id: userId,
+        pseudo: step1Data.pseudo,
+        gardien_type: selectedGardien,
+        xp: 0,
+        streak: 0,
+        badges: [],
+        pays_visites: []
+      });
+
+      // Ajouter aussi à la table subscribers
+      await sb.from('subscribers').upsert({
+        email: step1Data.email,
+        active: true
+      }, {onConflict: 'email'});
+    }
+
+    // Afficher le succès
+    const emojis = {explorateur:'🌍',gardien:'🌱',artiste:'🎨',scientifique:'🚀'};
+    const names = {explorateur:"L'Explorateur",gardien:"Le Gardien",artiste:"L'Artiste",scientifique:"Le Scientifique"};
+    document.getElementById('success-name').textContent=step1Data.pseudo;
+    document.getElementById('preview-emoji').textContent=emojis[selectedGardien];
+    document.getElementById('preview-name').textContent=names[selectedGardien];
+
+    const colors = {explorateur:'rgba(78,205,196,0.15)',gardien:'rgba(110,231,183,0.15)',artiste:'rgba(167,139,250,0.15)',scientifique:'rgba(251,146,60,0.15)'};
+    document.getElementById('gardien-preview').style.background=colors[selectedGardien];
+
+    document.getElementById('panel-2').classList.remove('active');
+    document.getElementById('panel-3').classList.add('active');
+    document.getElementById('step-2').className='step done';
+    document.getElementById('line-2').classList.add('done');
+    document.getElementById('step-3').className='step done';
+
+  } catch(e) {
+    const s=document.getElementById('status-2');
+    s.textContent = e.message.includes('already') ? 'Cet email est déjà utilisé. <a href="login.html" style="color:var(--teal)">Se connecter</a>' : 'Erreur : '+e.message;
+    s.className='status-msg error';
+    s.style.display='block';
+    btn.disabled=false; btn.textContent='Devenir Gardien ! 🛡️';
+  }
+}
+
+document.getElementById('password').addEventListener('keydown',e=>{if(e.key==='Enter')goStep2()});
+</script>
+</body>
+</html>
