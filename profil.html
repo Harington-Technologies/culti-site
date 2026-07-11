@@ -218,7 +218,7 @@ async function loadProfil(){
 
   if(!profile){
     // Profil pas encore créé par le trigger — attendre
-    document.getElementById('loading').innerHTML = '<span class="loading-emoji">⏳</span><div style="font-family:'Fredoka One',cursive;font-size:18px;color:rgba(255,255,255,0.6)">Profil en cours de création...</div>';
+    document.getElementById('loading').innerHTML = '<span class="loading-emoji">⏳</span><div style="font-size:18px;color:rgba(255,255,255,0.6)">Profil en cours de creation...</div>';
     setTimeout(loadProfil, 1500);
     return;
   }
