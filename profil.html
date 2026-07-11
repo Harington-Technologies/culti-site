@@ -129,7 +129,7 @@ nav{position:sticky;top:0;z-index:100;padding:1rem 2rem;display:flex;align-items
     <div class="streak-display">
       <div class="streak-num" id="streak-big">0</div>
       <div class="streak-label">jours consécutifs</div>
-      <div class="streak-msg" id="streak-msg">Commence aujourd'hui !</div>
+      <div class="streak-msg" id="streak-msg">Commence aujourd\'hui !</div>
     </div>
   </div>
 
@@ -261,8 +261,8 @@ async function loadProfil(){
 
   // Streak
   document.getElementById('streak-big').textContent=streak;
-  const msgs=['Commence aujourd'hui !','1 jour — bravo !','2 jours — continue !','3 jours — tu es régulier !'];
-  document.getElementById('streak-msg').textContent=streak>=7?`🏆 ${streak} jours — tu es incroyable !`:streak>0?`🔥 ${streak} jour${streak>1?'s':''} de suite — continue !`:'Reviens demain pour commencer ton streak !';
+    const streakMsg = streak >= 7 ? "🏆 "+streak+" jours — tu es incroyable !" : streak > 0 ? "🔥 "+streak+(streak>1?" jours":" jour")+" de suite — continue !" : "Reviens demain pour commencer ton streak !";
+  document.getElementById("streak-msg").textContent = streakMsg;
 
   // Arbre
   document.getElementById('arbre-emoji').textContent=arbre.emoji;
